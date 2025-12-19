@@ -1,0 +1,20 @@
+{
+  "name": "debt-tracker-app",
+  "version": "1.0.0",
+  "description": "Full-stack debt management application",
+  "scripts": {
+    "build": "cd client && npm install && npm run build",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "install:all": "npm run install:client && npm run install:server && npm install",
+    "start": "cd server && npm start"
+  },
+  "devDependencies": {
+    "serverless-http": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
