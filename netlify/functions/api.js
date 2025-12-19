@@ -57,18 +57,14 @@ const connectToDatabase = async () => {
     }
     
     cachedConnection = await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 30000, // Longer timeout for serverless cold starts
+      serverSelectionTimeoutMS: 30000,
       connectTimeoutMS: 30000,
       socketTimeoutMS: 45000,
       maxPoolSize: 1,
       minPoolSize: 0,
-      bufferCommands: false,
-      bufferMaxEntries: 0,
-      retryWrites: true,
-      w: 'majority',
-      // Additional options for better serverless compatibility
       maxIdleTimeMS: 30000,
-      serverSelectionRetries: 3
+      retryWrites: true,
+      w: 'majority'
     });
     
     console.log('✅ Connected to MongoDB');
