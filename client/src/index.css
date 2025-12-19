@@ -5,6 +5,40 @@
   box-sizing: border-box;
 }
 
+/* Prevent horizontal scrolling on mobile */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 768px) {
+  button, input, select, textarea, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve form input spacing */
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  /* Better table behavior on mobile */
+  table {
+    font-size: 0.85rem;
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
+  
+  table thead, table tbody, table tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -16,6 +50,13 @@ body {
   line-height: 1.6;
 }
 
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
 #root {
   min-height: 100vh;
 }
@@ -25,6 +66,18 @@ body {
   max-width: 1600px;
   margin: 0 auto;
   padding: 30px 50px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 15px 10px;
+  }
 }
 
 /* Login Screen */
@@ -45,6 +98,21 @@ body {
   max-width: 450px;
   padding: 40px;
   animation: loginSlideIn 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: 30px 25px;
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 25px 20px;
+    margin: 0 5px;
+    border-radius: 8px;
+  }
 }
 
 @keyframes loginSlideIn {
@@ -194,6 +262,18 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 8px;
+  }
+}
+
 .header-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -202,6 +282,24 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .header-content > div:first-child {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    gap: 10px;
+  }
 }
 
 .header-content > div:first-child {
@@ -213,6 +311,20 @@ body {
   font-size: 2.2rem;
   margin-bottom: 8px;
   font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 3px;
+  }
 }
 
 .header p {
@@ -233,6 +345,23 @@ body {
   gap: 12px;
   align-items: center;
   margin-left: auto;
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    margin-left: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 6px;
+  }
 }
 
 .username {
@@ -256,6 +385,21 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .nav-content {
+    padding: 0 10px;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-content {
+    padding: 0 5px;
+  }
 }
 
 .nav-item {
@@ -273,6 +417,21 @@ body {
   cursor: pointer;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .nav-item {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-item {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
 }
 
 .nav-item:hover {
@@ -314,6 +473,20 @@ body {
   white-space: nowrap;
 }
 
+@media (max-width: 768px) {
+  .btn-add-debt {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-add-debt {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}
+
 .btn-secondary {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
@@ -338,6 +511,20 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+  .debt-form {
+    padding: 20px 15px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-form {
+    padding: 15px 10px;
+    margin-bottom: 15px;
+  }
 }
 
 .debt-form h2 {
@@ -529,6 +716,33 @@ body {
   margin: auto;
 }
 
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 10px;
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+  
+  .modal-content {
+    max-height: 90vh;
+    width: 100%;
+    margin: 0;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 5px;
+    padding-top: 10px;
+  }
+  
+  .modal-content {
+    max-height: 95vh;
+    border-radius: 8px;
+  }
+}
+
 @keyframes modalSlideIn {
   from {
     opacity: 0;
@@ -628,6 +842,34 @@ body {
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  .total-debt {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .total-debt {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .total-debt {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .total-debt {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+}
+
 .total-debt h3 {
   color: #2c3e50;
   margin-bottom: 10px;
@@ -639,6 +881,30 @@ body {
   color: #e74c3c;
 }
 
+@media (max-width: 768px) {
+  .total-debt .amount {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .total-debt .amount {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .total-debt .amount {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .total-debt .amount {
+    font-size: 1.5rem;
+  }
+}
+
 .debt-item {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -646,6 +912,34 @@ body {
   margin-bottom: 16px;
   transition: all 0.2s ease;
   background: white;
+}
+
+@media (max-width: 768px) {
+  .debt-item {
+    padding: 15px 18px;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-item {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .debt-item {
+    padding: 15px 18px;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-item {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+  }
 }
 
 .debt-actions {
@@ -657,6 +951,21 @@ body {
 .debt-actions .btn {
   padding: 8px 16px;
   font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .debt-actions .btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-actions .btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    min-height: 36px;
+  }
 }
 
 .debt-item:hover {
@@ -673,10 +982,72 @@ body {
   border-bottom: 1px solid #e8e8e8;
 }
 
+@media (max-width: 768px) {
+  .debt-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-header {
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .debt-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-header {
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+  }
+}
+
 .debt-name-section {
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .debt-name-section {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-name-section {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .debt-name-section {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-name-section {
+    gap: 8px;
+  }
 }
 
 .priority-badge {
@@ -695,6 +1066,30 @@ body {
   font-size: 1.25rem;
   font-weight: 700;
   color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+  .debt-name {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-name {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .debt-name {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-name {
+    font-size: 1rem;
+  }
 }
 
 .priority-reason {
@@ -720,6 +1115,42 @@ body {
   margin-top: 14px;
 }
 
+@media (max-width: 768px) {
+  .debt-details {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-details {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .debt-details {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-details {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+}
+
 .detail-item {
   display: flex;
   flex-direction: column;
@@ -727,6 +1158,30 @@ body {
   background: #f8f9fa;
   border-radius: 6px;
   border: 1px solid #e8e8e8;
+}
+
+@media (max-width: 768px) {
+  .detail-item {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-item {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-item {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-item {
+    padding: 6px 8px;
+  }
 }
 
 .detail-label {
@@ -862,6 +1317,29 @@ body {
   z-index: 9999;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   animation: slideDown 0.3s ease, slideUp 0.3s ease 2.7s;
+}
+
+@media (max-width: 768px) {
+  .notification {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    width: calc(100% - 20px);
+    transform: none;
+    padding: 14px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    width: calc(100% - 10px);
+    padding: 12px 16px;
+    font-size: 0.85rem;
+  }
 }
 
 @keyframes slideDown {
