@@ -5,6 +5,7 @@ import DebtList from './components/DebtList'
 import Dashboard from './components/Dashboard'
 import Login from './components/Login'
 import Register from './components/Register'
+import Footer from './components/Footer'
 import './App.css'
 
 function ProtectedRoute({ isAuthenticated, children }) {
@@ -26,92 +27,96 @@ function AppContent({
 
   return (
     <div className="App">
-      <header className="header">
-        <div className="header-content">
-          <div>
-            <h1>💰 Debt Tracker</h1>
-            <p>Manage and track your debts</p>
-            <p className="username">Logged in as: {localStorage.getItem('username')}</p>
+      <div className="main-content">
+        <header className="header">
+          <div className="header-content">
+            <div>
+              <h1>💰 Debt Tracker</h1>
+              <p>Manage and track your debts</p>
+              <p className="username">Logged in as: {localStorage.getItem('username')}</p>
+            </div>
+            <div className="header-actions">
+              <button 
+                className="btn btn-primary btn-add-debt"
+                onClick={() => setIsModalOpen(true)}
+              >
+                + Add Debt
+              </button>
+              <button 
+                className="btn btn-secondary btn-logout"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
           </div>
-          <div className="header-actions">
-            <button 
-              className="btn btn-primary btn-add-debt"
-              onClick={() => setIsModalOpen(true)}
+        </header>
+
+        <nav className="nav-bar">
+          <div className="nav-content">
+            <Link 
+              to="/dashboard" 
+              className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}
             >
-              + Add Debt
-            </button>
-            <button 
-              className="btn btn-secondary btn-logout"
-              onClick={handleLogout}
+              Dashboard
+            </Link>
+            <Link 
+              to="/debts" 
+              className={`nav-item ${location.pathname === '/debts' ? 'active' : ''}`}
             >
-              Logout
-            </button>
+              All Debts
+            </Link>
           </div>
-        </div>
-      </header>
+        </nav>
 
-      <nav className="nav-bar">
-        <div className="nav-content">
-          <Link 
-            to="/dashboard" 
-            className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}
-          >
-            Dashboard
-          </Link>
-          <Link 
-            to="/debts" 
-            className={`nav-item ${location.pathname === '/debts' ? 'active' : ''}`}
-          >
-            All Debts
-          </Link>
-        </div>
-      </nav>
+        <Routes>
+          <Route path="/dashboard" element={
+            <div className="container">
+              {error && (
+                <div className="error">
+                  <strong>Error:</strong> {error}
+                </div>
+              )}
 
-      <Routes>
-        <Route path="/dashboard" element={
-          <div className="container">
-            {error && (
-              <div className="error">
-                <strong>Error:</strong> {error}
-              </div>
-            )}
+              {loading ? (
+                <div className="loading">Loading debts...</div>
+              ) : (
+                <Dashboard debts={debts} />
+              )}
+            </div>
+          } />
+          <Route path="/debts" element={
+            <div className="container">
+              {error && (
+                <div className="error">
+                  <strong>Error:</strong> {error}
+                </div>
+              )}
 
-            {loading ? (
-              <div className="loading">Loading debts...</div>
-            ) : (
-              <Dashboard debts={debts} />
-            )}
+              {loading ? (
+                <div className="loading">Loading debts...</div>
+              ) : (
+                <DebtList debts={debts} onDeleteDebt={handleDeleteDebt} />
+              )}
+            </div>
+          } />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+
+        {/* Modal for adding debt */}
+        {isModalOpen && (
+          <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <DebtForm 
+                onAddDebt={handleAddDebt} 
+                onClose={() => setIsModalOpen(false)}
+              />
+            </div>
           </div>
-        } />
-        <Route path="/debts" element={
-          <div className="container">
-            {error && (
-              <div className="error">
-                <strong>Error:</strong> {error}
-              </div>
-            )}
+        )}
+      </div>
 
-            {loading ? (
-              <div className="loading">Loading debts...</div>
-            ) : (
-              <DebtList debts={debts} onDeleteDebt={handleDeleteDebt} />
-            )}
-          </div>
-        } />
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      </Routes>
-
-      {/* Modal for adding debt */}
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <DebtForm 
-              onAddDebt={handleAddDebt} 
-              onClose={() => setIsModalOpen(false)}
-            />
-          </div>
-        </div>
-      )}
+      <Footer />
     </div>
   )
 }
