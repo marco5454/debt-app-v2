@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-function DebtForm({ onAddDebt, onClose }) {
+function DebtForm({ onAddDebt, onUpdateDebt, debtToEdit, onClose }) {
   // Form state
   const [formData, setFormData] = useState({
     name: '',
@@ -15,6 +15,34 @@ function DebtForm({ onAddDebt, onClose }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   // Error state for form validation
   const [formError, setFormError] = useState('')
+
+  const isEditMode = Boolean(debtToEdit)
+
+  useEffect(() => {
+    if (debtToEdit) {
+      setFormData({
+        name: debtToEdit.name || '',
+        totalAmount: debtToEdit.totalAmount?.toString() || '',
+        interestRate: debtToEdit.interestRate !== undefined ? debtToEdit.interestRate.toString() : '',
+        monthlyPayment: debtToEdit.monthlyPayment !== undefined ? debtToEdit.monthlyPayment.toString() : '',
+        dateOfLoan: debtToEdit.dateOfLoan ? new Date(debtToEdit.dateOfLoan).toISOString().split('T')[0] : '',
+        creditor: debtToEdit.creditor || '',
+        description: debtToEdit.description || ''
+      })
+      setFormError('')
+    } else {
+      setFormData({
+        name: '',
+        totalAmount: '',
+        interestRate: '',
+        monthlyPayment: '',
+        dateOfLoan: '',
+        creditor: '',
+        description: ''
+      })
+      setFormError('')
+    }
+  }, [debtToEdit])
 
   // Handle input changes
   const handleChange = (e) => {
@@ -78,8 +106,12 @@ function DebtForm({ onAddDebt, onClose }) {
 
     try {
       setIsSubmitting(true)
-      await onAddDebt(debtData)
-      
+      if (isEditMode) {
+        await onUpdateDebt(debtToEdit._id, debtData)
+      } else {
+        await onAddDebt(debtData)
+      }
+
       // Reset form on success
       setFormData({
         name: '',
@@ -96,7 +128,7 @@ function DebtForm({ onAddDebt, onClose }) {
         onClose()
       }
     } catch (err) {
-      setFormError(err.message || 'Failed to add debt')
+      setFormError(err.message || (isEditMode ? 'Failed to update debt' : 'Failed to add debt'))
     } finally {
       setIsSubmitting(false)
     }
@@ -105,7 +137,7 @@ function DebtForm({ onAddDebt, onClose }) {
   return (
     <div className="debt-form">
       <div className="debt-form-header">
-        <h2>Add New Debt</h2>
+        <h2>{isEditMode ? 'Update Debt' : 'Add New Debt'}</h2>
         <button 
           className="btn-close" 
           onClick={onClose}
@@ -235,7 +267,7 @@ function DebtForm({ onAddDebt, onClose }) {
           className="btn btn-primary"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Adding...' : 'Add Debt'}
+          {isSubmitting ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update Debt' : 'Add Debt')}
         </button>
       </form>
     </div>

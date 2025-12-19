@@ -1,143 +1,194 @@
-import { useMemo } from 'react'
+import { useState, useEffect } from 'react'
 
-function Dashboard({ debts }) {
-  // Calculate total debt amount
-  const totalDebt = useMemo(() => {
-    return debts.reduce((sum, debt) => sum + debt.totalAmount, 0)
-  }, [debts])
+export default function Dashboard({ debts }) {
+  const [stats, setStats] = useState({
+    totalDebt: 0,
+    totalPaid: 0,
+    remainingDebt: 0,
+    totalDebts: 0,
+    activeDebts: 0,
+    completedDebts: 0,
+    averageProgress: 0,
+    highestDebt: null,
+    overdueDebts: 0,
+    totalInterestAccrued: 0
+  })
 
-  // Calculate total monthly payment commitment
-  const totalMonthlyPayment = useMemo(() => {
-    return debts
-      .filter(debt => debt.monthlyPayment > 0)
-      .reduce((sum, debt) => sum + debt.monthlyPayment, 0)
-  }, [debts])
+  useEffect(() => {
+    if (!debts || debts.length === 0) {
+      setStats({
+        totalDebt: 0,
+        totalPaid: 0,
+        remainingDebt: 0,
+        totalDebts: 0,
+        activeDebts: 0,
+        completedDebts: 0,
+        averageProgress: 0,
+        highestDebt: null,
+        overdueDebts: 0,
+        totalInterestAccrued: 0
+      })
+      return
+    }
 
-  // Calculate estimated debt-free date
-  // This is the longest payoff time among all debts
-  const estimatedDebtFreeDate = useMemo(() => {
-    if (debts.length === 0) return null
+    const totalDebt = debts.reduce((sum, debt) => sum + debt.totalAmount, 0)
+    const totalPaid = debts.reduce((sum, debt) => sum + (debt.totalPaid || 0), 0)
+    const remainingDebt = totalDebt - totalPaid
+    const completedDebts = debts.filter(debt => (debt.totalPaid || 0) >= debt.totalAmount).length
+    const activeDebts = debts.length - completedDebts
+    const averageProgress = totalDebt > 0 ? (totalPaid / totalDebt * 100) : 0
+    const highestDebt = debts.reduce((max, debt) => 
+      debt.totalAmount > (max?.totalAmount || 0) ? debt : max, null)
+    
+    // Calculate overdue debts and interest accrued
+    let overdueCount = 0
+    let totalInterestAccrued = 0
 
-    let maxMonths = 0
     debts.forEach(debt => {
-      if (debt.monthlyPayment > 0) {
-        const months = Math.ceil(debt.totalAmount / debt.monthlyPayment)
-        if (months > maxMonths) {
-          maxMonths = months
+      if (debt.monthlyPayment > 0 && debt.interestRate > 0) {
+        const loanDate = new Date(debt.dateOfLoan)
+        const currentDate = new Date()
+        const monthsElapsed = Math.floor((currentDate - loanDate) / (1000 * 60 * 60 * 24 * 30.44))
+        const expectedPayments = monthsElapsed * debt.monthlyPayment
+        const actualPaid = debt.totalPaid || 0
+        
+        if (expectedPayments > actualPaid) {
+          overdueCount++
+          const overdueAmount = expectedPayments - actualPaid
+          const monthlyInterestRate = debt.interestRate / 100 / 12
+          const interestAccrued = Math.max(overdueAmount * monthlyInterestRate * monthsElapsed, 0)
+          totalInterestAccrued += interestAccrued
         }
       }
     })
 
-    if (maxMonths === 0) return null
-
-    const today = new Date()
-    const debtFreeDate = new Date(today)
-    debtFreeDate.setMonth(today.getMonth() + maxMonths)
-
-    return debtFreeDate
+    setStats({
+      totalDebt,
+      totalPaid,
+      remainingDebt,
+      totalDebts: debts.length,
+      activeDebts,
+      completedDebts,
+      averageProgress,
+      highestDebt,
+      overdueDebts: overdueCount,
+      totalInterestAccrued
+    })
   }, [debts])
 
-  // Calculate progress (simple: based on total paid vs total debt)
-  // For simplicity, we'll show progress as percentage of debts that could be paid off
-  // This is a simplified progress indicator
-  const progress = useMemo(() => {
-    if (debts.length === 0 || totalDebt === 0) return 0
-    
-    // Simple progress: assume user has paid some amount
-    // For now, we'll show 0% as starting point
-    // In a real app, you'd track payments made
-    return 0
-  }, [debts, totalDebt])
-
-  // Format currency (Philippine Peso)
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-PH', {
       style: 'currency',
-      currency: 'PHP'
-    }).format(amount)
+      currency: 'PHP',
+    }).format(amount || 0)
   }
 
-  // Format date
-  const formatDate = (date) => {
-    if (!date) return 'N/A'
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(date)
-  }
-
-  // Calculate months until debt-free
-  const monthsUntilDebtFree = useMemo(() => {
-    if (!estimatedDebtFreeDate) return 0
-    const today = new Date()
-    const months = Math.ceil((estimatedDebtFreeDate - today) / (1000 * 60 * 60 * 24 * 30))
-    return months
-  }, [estimatedDebtFreeDate])
+  // Removed payments functionality
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-grid">
-        {/* 1. Total Debt - Primary Focus */}
-        <div className="dashboard-card primary">
-          <div className="dashboard-label">Total Debt</div>
-          <div className="dashboard-value primary-value">
-            {formatCurrency(totalDebt)}
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1>Debt Overview</h1>
+        <p>Your complete financial debt summary</p>
+      </div>
+
+      {/* Main Stats Cards */}
+      <div className="dashboard-stats">
+        <div className="stat-card total-debt">
+          <div className="stat-icon">💳</div>
+          <div className="stat-content">
+            <h3>Total Debt</h3>
+            <div className="stat-value">{formatCurrency(stats.totalDebt)}</div>
           </div>
         </div>
 
-        {/* 2. Monthly Payment Commitment */}
-        <div className="dashboard-card">
-          <div className="dashboard-label">Monthly Payment Commitment</div>
-          <div className="dashboard-value">
-            {formatCurrency(totalMonthlyPayment)}
+        <div className="stat-card total-paid">
+          <div className="stat-icon">✅</div>
+          <div className="stat-content">
+            <h3>Total Paid</h3>
+            <div className="stat-value">{formatCurrency(stats.totalPaid)}</div>
           </div>
         </div>
 
-        {/* 3. Estimated Debt-Free Date */}
-        <div className="dashboard-card">
-          <div className="dashboard-label">Estimated Debt-Free Date</div>
-          <div className="dashboard-value">
-            {estimatedDebtFreeDate ? formatDate(estimatedDebtFreeDate) : 'N/A'}
+        <div className="stat-card remaining-debt">
+          <div className="stat-icon">⏳</div>
+          <div className="stat-content">
+            <h3>Remaining</h3>
+            <div className="stat-value">{formatCurrency(stats.remainingDebt)}</div>
           </div>
-          {estimatedDebtFreeDate && (
-            <div className="dashboard-subtext">
-              {monthsUntilDebtFree} {monthsUntilDebtFree === 1 ? 'month' : 'months'} remaining
-            </div>
-          )}
         </div>
 
-        {/* 4. Progress Indicator */}
-        <div className="dashboard-card">
-          <div className="dashboard-label">Progress</div>
-          <div className="progress-container">
-            <div className="progress-bar">
+        <div className="stat-card progress">
+          <div className="stat-icon">📊</div>
+          <div className="stat-content">
+            <h3>Progress</h3>
+            <div className="stat-value">{stats.averageProgress.toFixed(1)}%</div>
+            <div className="progress-bar-dashboard">
               <div 
-                className="progress-fill" 
-                style={{ width: `${progress}%` }}
+                className="progress-fill-dashboard"
+                style={{ width: `${Math.min(stats.averageProgress, 100)}%` }}
               ></div>
             </div>
-            <div className="progress-text">{progress}%</div>
-          </div>
-          <div className="dashboard-subtext">
-            {progress === 0 ? 'Start your journey to debt freedom!' : 'Keep going!'}
-          </div>
-        </div>
-
-        {/* 5. Total Debts */}
-        <div className="dashboard-card">
-          <div className="dashboard-label">Total Debts</div>
-          <div className="dashboard-value">
-            {debts.length}
-          </div>
-          <div className="dashboard-subtext">
-            {debts.length === 1 ? 'debt' : 'debts'} to track
           </div>
         </div>
       </div>
+
+      {/* Secondary Stats */}
+      <div className="dashboard-secondary-stats">
+        <div className="secondary-stat-card">
+          <h4>Active Debts</h4>
+          <span className="secondary-value active">{stats.activeDebts}</span>
+        </div>
+        <div className="secondary-stat-card">
+          <h4>Completed</h4>
+          <span className="secondary-value completed">{stats.completedDebts}</span>
+        </div>
+        <div className="secondary-stat-card">
+          <h4>Overdue</h4>
+          <span className={`secondary-value ${stats.overdueDebts > 0 ? 'overdue' : 'good'}`}>
+            {stats.overdueDebts}
+          </span>
+        </div>
+        <div className="secondary-stat-card">
+          <h4>Interest Accrued</h4>
+          <span className={`secondary-value ${stats.totalInterestAccrued > 0 ? 'interest' : 'good'}`}>
+            {formatCurrency(stats.totalInterestAccrued)}
+          </span>
+        </div>
+      </div>
+
+      {/* Bottom Row - Side by Side */}
+      <div className="dashboard-bottom-row">
+        {/* Highest Debt Alert */}
+        {stats.highestDebt && (
+          <div className="highest-debt-alert">
+            <div className="alert-icon">⚠️</div>
+            <div className="alert-content">
+              <h4>Highest Debt</h4>
+              <p>
+                <strong>{stats.highestDebt.name}</strong> - {formatCurrency(stats.highestDebt.totalAmount)}
+                {stats.highestDebt.totalPaid > 0 && (
+                  <span className="paid-info">
+                    ({formatCurrency(stats.highestDebt.totalAmount - (stats.highestDebt.totalPaid || 0))} remaining)
+                  </span>
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
+
+      </div>
+
+      {/* Empty State */}
+      {stats.totalDebts === 0 && (
+        <div className="dashboard-empty">
+          <div className="empty-icon">🎉</div>
+          <h3>No Debts Yet!</h3>
+          <p>Start by adding your first debt to track your financial progress.</p>
+        </div>
+      )}
     </div>
   )
 }
-
-export default Dashboard
 

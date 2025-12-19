@@ -56,6 +56,27 @@ const debtSchema = new mongoose.Schema({
     type: String,
     trim: true,
     default: ''
+  },
+
+  // Computed and persisted fields for convenience
+  totalPaid: {
+    type: Number,
+    default: 0,
+    min: [0, 'Total paid cannot be negative']
+  },
+  remainingAmount: {
+    type: Number,
+    default: 0,
+    min: [0, 'Remaining amount cannot be negative']
+  },
+  lastPaymentAmount: {
+    type: Number,
+    default: 0,
+    min: [0, 'Last payment amount cannot be negative']
+  },
+  lastPaymentDate: {
+    type: Date,
+    default: null
   }
 }, {
   // Automatically add createdAt and updatedAt timestamps

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import DebtForm from './components/DebtForm'
-import DebtList from './components/DebtList'
 import Dashboard from './components/Dashboard'
 import Login from './components/Login'
 import Register from './components/Register'
 import Footer from './components/Footer'
+import PaymentForm from './components/PaymentForm'
+import Payments from './components/Payments'
+import AllDebtsList from './components/AllDebtsList'
 import './App.css'
 
 function ProtectedRoute({ isAuthenticated, children }) {
@@ -13,21 +15,37 @@ function ProtectedRoute({ isAuthenticated, children }) {
 }
 
 function AppContent({ 
-  debts, 
+  debts,
   loading, 
   error, 
   isModalOpen, 
   setIsModalOpen, 
+  editingDebt,
+  setEditingDebt,
+  paymentDebt,
+  setPaymentDebt,
   handleLogout, 
   fetchDebts, 
   handleAddDebt, 
-  handleDeleteDebt 
+  handleUpdateDebt,
+  handleDeleteDebt,
+  handleAddPayment,
+  notification,
 }) {
   const location = useLocation()
 
   return (
     <div className="App">
       <div className="main-content">
+        {notification && (
+          <div className={`notification ${notification.type === 'debt' ? 'notification-debt' : 'notification-success'}`}>
+            {notification.type === 'debt' ? (
+              <>📋 {notification.message}</>
+            ) : (
+              <>✓ You paid <strong>{notification.amount}</strong> successfully!</>
+            )}
+          </div>
+        )}
         <header className="header">
           <div className="header-content">
             <div>
@@ -61,10 +79,16 @@ function AppContent({
               Dashboard
             </Link>
             <Link 
-              to="/debts" 
-              className={`nav-item ${location.pathname === '/debts' ? 'active' : ''}`}
+              to="/all-debts" 
+              className={`nav-item ${location.pathname === '/all-debts' ? 'active' : ''}`}
             >
               All Debts
+            </Link>
+            <Link 
+              to="/payments" 
+              className={`nav-item ${location.pathname === '/payments' ? 'active' : ''}`}
+            >
+              Payments
             </Link>
           </div>
         </nav>
@@ -85,18 +109,21 @@ function AppContent({
               )}
             </div>
           } />
-          <Route path="/debts" element={
+          <Route path="/all-debts" element={
             <div className="container">
-              {error && (
-                <div className="error">
-                  <strong>Error:</strong> {error}
-                </div>
-              )}
-
               {loading ? (
                 <div className="loading">Loading debts...</div>
               ) : (
-                <DebtList debts={debts} onDeleteDebt={handleDeleteDebt} />
+                <AllDebtsList debts={debts} onEditDebt={setEditingDebt} onDeleteDebt={handleDeleteDebt} />
+              )}
+            </div>
+          } />
+          <Route path="/payments" element={
+            <div className="container">
+              {loading ? (
+                <div className="loading">Loading payments...</div>
+              ) : (
+                <Payments debts={debts} onMakePayment={setPaymentDebt} />
               )}
             </div>
           } />
@@ -110,6 +137,32 @@ function AppContent({
               <DebtForm 
                 onAddDebt={handleAddDebt} 
                 onClose={() => setIsModalOpen(false)}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Modal for updating debt */}
+        {editingDebt && (
+          <div className="modal-overlay" onClick={() => setEditingDebt(null)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <DebtForm
+                debtToEdit={editingDebt}
+                onUpdateDebt={handleUpdateDebt}
+                onClose={() => setEditingDebt(null)}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Modal for making payment */}
+        {paymentDebt && (
+          <div className="modal-overlay" onClick={() => setPaymentDebt(null)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <PaymentForm 
+                debt={paymentDebt} 
+                onAddPayment={handleAddPayment} 
+                onClose={() => setPaymentDebt(null)}
               />
             </div>
           </div>
@@ -132,6 +185,12 @@ function App() {
   const [error, setError] = useState(null)
   // State to control modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false)
+  // State for editing a debt
+  const [editingDebt, setEditingDebt] = useState(null)
+  // State for payment modal
+  const [paymentDebt, setPaymentDebt] = useState(null)
+  // State for success notification
+  const [notification, setNotification] = useState(null)
 
   // Check if user is logged in on mount
   useEffect(() => {
@@ -146,6 +205,7 @@ function App() {
 
   // Handle login
   const handleLogin = () => {
+    setError(null)
     setIsAuthenticated(true)
     fetchDebts()
   }
@@ -157,6 +217,10 @@ function App() {
     localStorage.removeItem('userId')
     setIsAuthenticated(false)
     setDebts([])
+    setError(null)
+    setLoading(false)
+    setEditingDebt(null)
+    setPaymentDebt(null)
   }
 
   // Fetch all debts from the backend API for the logged-in user
@@ -167,7 +231,10 @@ function App() {
       const userId = localStorage.getItem('userId')
       
       if (!userId) {
-        throw new Error('User not authenticated')
+        setIsAuthenticated(false)
+        setError('Please log in again to load your debts.')
+        setLoading(false)
+        return
       }
       
       // Debug: Log the userId being used
@@ -190,6 +257,8 @@ function App() {
       setLoading(false)
     }
   }
+
+
 
 
   // Handle adding a new debt
@@ -222,11 +291,98 @@ function App() {
 
       // Refresh the debt list after adding
       await fetchDebts()
+      
+      // Show success notification
+      const formattedAmount = new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP'
+      }).format(debtData.totalAmount)
+      
+      setNotification({ 
+        type: 'debt',
+        message: `Debt "${debtData.name}" added for ${formattedAmount}` 
+      })
+      setTimeout(() => setNotification(null), 3500)
     } catch (err) {
       setError(err.message)
       console.error('Error adding debt:', err)
       throw err // Re-throw so the form can handle it
     }
+  }
+
+  // Handle updating an existing debt
+  const handleUpdateDebt = async (debtId, debtData) => {
+    try {
+      const userId = localStorage.getItem('userId')
+
+      if (!userId) {
+        throw new Error('User not authenticated')
+      }
+
+      const payload = { ...debtData, userId }
+
+      const response = await fetch(`/api/debts/${debtId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      const data = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to update debt')
+      }
+
+      await fetchDebts()
+
+      setNotification({
+        type: 'debt',
+        message: `Debt "${debtData.name}" updated successfully`
+      })
+      setTimeout(() => setNotification(null), 3500)
+    } catch (err) {
+      setError(err.message)
+      console.error('Error updating debt:', err)
+      throw err
+    }
+  }
+
+  // Handle adding a payment
+  const handleAddPayment = async (paymentData) => {
+    const userId = localStorage.getItem('userId')
+
+    if (!userId) {
+      throw new Error('User not authenticated')
+    }
+
+    const payload = { ...paymentData, userId }
+
+    const response = await fetch('/api/payments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+
+    const data = await response.json().catch(() => ({}))
+
+    if (!response.ok) {
+      throw new Error(data.error || data.message || 'Failed to log payment')
+    }
+
+    await fetchDebts()
+    
+    // Show success notification
+    const formattedAmount = new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP'
+    }).format(paymentData.amount)
+    
+    setNotification({ amount: formattedAmount })
+    setTimeout(() => setNotification(null), 3000)
   }
 
   // Handle deleting a debt
@@ -278,10 +434,17 @@ function App() {
               error={error}
               isModalOpen={isModalOpen}
               setIsModalOpen={setIsModalOpen}
+              editingDebt={editingDebt}
+              setEditingDebt={setEditingDebt}
+              paymentDebt={paymentDebt}
+              setPaymentDebt={setPaymentDebt}
               handleLogout={handleLogout}
               fetchDebts={fetchDebts}
               handleAddDebt={handleAddDebt}
+              handleUpdateDebt={handleUpdateDebt}
               handleDeleteDebt={handleDeleteDebt}
+              handleAddPayment={handleAddPayment}
+              notification={notification}
             />
           </ProtectedRoute>
         } />

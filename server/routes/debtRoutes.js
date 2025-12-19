@@ -78,7 +78,12 @@ router.post('/', async (req, res) => {
       monthlyPayment: monthlyPayment || 0,
       dateOfLoan: new Date(dateOfLoan),
       creditor: creditor || '',
-      description: description || ''
+      description: description || '',
+      // Initialize payment summary fields
+      totalPaid: 0,
+      remainingAmount: totalAmount,
+      lastPaymentAmount: 0,
+      lastPaymentDate: null,
     });
     
     // Save to database
@@ -91,6 +96,48 @@ router.post('/', async (req, res) => {
     res.status(400).json({ message: 'Error creating debt', error: error.message });
   }
 });
+
+// PUT /debts/:id - Update an existing debt
+// Expects JSON body with userId (required) and any updatable fields
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const { userId, name, totalAmount, interestRate, monthlyPayment, dateOfLoan, creditor, description } = req.body
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required to update a debt' })
+    }
+
+    const debt = await Debt.findById(id)
+    if (!debt) {
+      return res.status(404).json({ message: 'Debt not found' })
+    }
+
+    if (debt.userId !== String(userId)) {
+      return res.status(403).json({ message: 'You do not have permission to update this debt' })
+    }
+
+    const updates = {}
+    if (name !== undefined) updates.name = name
+    if (totalAmount !== undefined) updates.totalAmount = totalAmount
+    if (interestRate !== undefined) updates.interestRate = interestRate
+    if (monthlyPayment !== undefined) updates.monthlyPayment = monthlyPayment
+    if (dateOfLoan !== undefined) updates.dateOfLoan = new Date(dateOfLoan)
+    if (creditor !== undefined) updates.creditor = creditor
+    if (description !== undefined) updates.description = description
+
+    // Keep remainingAmount in sync with totalPaid when totalAmount changes
+    if (totalAmount !== undefined) {
+      const currentPaid = debt.totalPaid || 0
+      updates.remainingAmount = Math.max(totalAmount - currentPaid, 0)
+    }
+
+    const updatedDebt = await Debt.findByIdAndUpdate(id, { $set: updates }, { new: true, runValidators: true })
+    res.status(200).json(updatedDebt)
+  } catch (error) {
+    res.status(400).json({ message: 'Error updating debt', error: error.message })
+  }
+})
 
 // DELETE /debts/:id - Delete a debt by ID
 // Query parameter: userId (required) - to verify ownership

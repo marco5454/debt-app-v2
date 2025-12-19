@@ -1,6 +1,7 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
-function DebtList({ debts, onDeleteDebt }) {
+function DebtList({ debts, onDeleteDebt, payments = [], onOpenPayment }) {
+  const [expandedDebt, setExpandedDebt] = useState(null)
   // Calculate payoff duration in months
   // Formula: totalAmount / monthlyPayment
   const calculatePayoffMonths = (totalAmount, monthlyPayment) => {
@@ -96,115 +97,163 @@ function DebtList({ debts, onDeleteDebt }) {
   return (
     <div className="debt-list">
       <div className="debt-list-header">
-        <h2>Top 5 Priority Debts</h2>
+        <h2>All Debts</h2>
         {debts.length > 5 && (
           <p className="debt-list-subtitle">
-            Showing top 5 of {debts.length} debts based on balance, payoff time, and monthly payment
+            Showing top 5 priority debts out of {debts.length} total debts
             {debts.some(debt => debt.monthlyPayment === 0) && ' (some debts have no monthly payment specified)'}
           </p>
         )}
       </div>
 
       {topPriorityDebts.length > 0 ? (
-        <>
-          {/* List of Priority Debts */}
-          {topPriorityDebts.map((debt, index) => {
-            const payoffMonths = calculatePayoffMonths(debt.totalAmount, debt.monthlyPayment)
-            const payoffDuration = formatPayoffDuration(payoffMonths)
-            const priorityReason = getPriorityReason(debt, debts)
+        <div className="debt-table-container">
+          <table className="debt-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Debt Name</th>
+                <th>Total</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {topPriorityDebts.map((debt, index) => {
+                const payoffMonths = calculatePayoffMonths(debt.totalAmount, debt.monthlyPayment)
+                const payoffDuration = formatPayoffDuration(payoffMonths)
+                const priorityReason = getPriorityReason(debt, debts)
+                const debtPayments = payments.filter(p => p.debtId === debt._id)
+                const isExpanded = expandedDebt === debt._id
 
-            return (
-              <div key={debt._id} className="debt-item priority-debt">
-                <div className="debt-header">
-                  <div className="debt-name-section">
-                    <div className="priority-badge">#{index + 1}</div>
-                    <div className="debt-name">{debt.name}</div>
-                  </div>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => {
-                      if (window.confirm(`Are you sure you want to delete "${debt.name}"?`)) {
-                        onDeleteDebt(debt._id)
-                      }
-                    }}
-                  >
-                    Delete
-                  </button>
-                </div>
-                
-                <div className="priority-reason">
-                  {priorityReason}
-                </div>
+                return (
+                  <>
+                    <tr key={debt._id} className="debt-row">
+                      <td className="priority-col">
+                        <span className="priority-num">#{index + 1}</span>
+                      </td>
+                      <td className="debt-name-col">
+                        <strong>{debt.name}</strong>
+                      </td>
+                      <td className="amount-col">
+                        <strong style={{ color: '#e74c3c', fontSize: '1rem' }}>
+                          {formatCurrency(debt.totalAmount)}
+                        </strong>
+                      </td>
+                      <td className="actions-col">
+                        <div className="table-actions">
+                          <button
+                            className="btn-icon"
+                            onClick={() => setExpandedDebt(isExpanded ? null : debt._id)}
+                            title={isExpanded ? "Collapse" : "Expand"}
+                          >
+                            {isExpanded ? '▼' : '▶'}
+                          </button>
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => onOpenPayment && onOpenPayment(debt)}
+                            title="Log Payment"
+                          >
+                            Pay
+                          </button>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => {
+                              if (window.confirm(`Delete "${debt.name}"?`)) {
+                                onDeleteDebt(debt._id)
+                              }
+                            }}
+                            title="Delete Debt"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {isExpanded && (
+                      <tr className="debt-expanded-row">
+                        <td colSpan="4">
+                          <div className="debt-expanded-content">
+                            <div className="expanded-grid">
+                              <div className="expanded-item">
+                                <span className="expanded-label">Creditor</span>
+                                <span className="expanded-value">{debt.creditor || 'N/A'}</span>
+                              </div>
+                              <div className="expanded-item">
+                                <span className="expanded-label">Remaining Balance</span>
+                                <span className="expanded-value" style={{ color: '#c0392b' }}>
+                                  {formatCurrency(Math.max(debt.remainingAmount || debt.totalAmount, 0))}
+                                </span>
+                              </div>
+                              <div className="expanded-item">
+                                <span className="expanded-label">Interest Rate</span>
+                                <span className="expanded-value">{debt.interestRate > 0 ? `${debt.interestRate}%` : 'None'}</span>
+                              </div>
+                              <div className="expanded-item">
+                                <span className="expanded-label">Monthly Payment</span>
+                                <span className="expanded-value">
+                                  {debt.monthlyPayment > 0 ? formatCurrency(debt.monthlyPayment) : 'N/A'}
+                                </span>
+                              </div>
+                              <div className="expanded-item">
+                                <span className="expanded-label">Loan Date</span>
+                                <span className="expanded-value">
+                                  {debt.dateOfLoan ? new Date(debt.dateOfLoan).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}
+                                </span>
+                              </div>
+                              <div className="expanded-item">
+                                <span className="expanded-label">Payoff Time</span>
+                                <span className="expanded-value">
+                                  {debt.monthlyPayment > 0 ? (payoffMonths > 12 ? `${Math.floor(payoffMonths / 12)}y ${payoffMonths % 12}m` : `${payoffMonths}m`) : 'N/A'}
+                                </span>
+                              </div>
+                              {debt.lastPaymentDate && (
+                                <div className="expanded-item">
+                                  <span className="expanded-label">Last Payment</span>
+                                  <span className="expanded-value">
+                                    {formatCurrency(debt.lastPaymentAmount || 0)} on {new Date(debt.lastPaymentDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                  </span>
+                                </div>
+                              )}
+                              {typeof debt.totalPaid === 'number' && (
+                                <div className="expanded-item">
+                                  <span className="expanded-label">Total Paid</span>
+                                  <span className="expanded-value" style={{ color: '#27ae60' }}>
+                                    {formatCurrency(debt.totalPaid)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
 
-                <div className="debt-details">
-                  <div className="detail-item">
-                    <span className="detail-label">Total Amount</span>
-                    <span className="detail-value">{formatCurrency(debt.totalAmount)}</span>
-                  </div>
+                            {debt.description && (
+                              <div className="expanded-section">
+                                <strong>Description:</strong>
+                                <p>{debt.description}</p>
+                              </div>
+                            )}
 
-                  <div className="detail-item">
-                    <span className="detail-label">Monthly Payment</span>
-                    <span className="detail-value">
-                      {debt.monthlyPayment > 0 ? formatCurrency(debt.monthlyPayment) : 'Not specified'}
-                    </span>
-                  </div>
-
-                  <div className="detail-item">
-                    <span className="detail-label">Interest Rate</span>
-                    <span className="detail-value">
-                      {debt.interestRate > 0 ? formatPercentage(debt.interestRate) : 'None'}
-                    </span>
-                  </div>
-
-                  <div className="detail-item">
-                    <span className="detail-label">Date of Loan</span>
-                    <span className="detail-value">
-                      {debt.dateOfLoan ? new Date(debt.dateOfLoan).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      }) : 'N/A'}
-                    </span>
-                  </div>
-
-                  {debt.creditor && (
-                    <div className="detail-item">
-                      <span className="detail-label">Creditor</span>
-                      <span className="detail-value">{debt.creditor}</span>
-                    </div>
-                  )}
-                </div>
-
-                {debt.description && (
-                  <div className="debt-description">
-                    <h4>Description</h4>
-                    <p>{debt.description}</p>
-                  </div>
-                )}
-
-                {/* Payoff Information */}
-                <div className="payoff-info">
-                  <h4>Payoff Estimate</h4>
-                  {debt.monthlyPayment > 0 ? (
-                    <p>
-                      <strong>{payoffDuration}</strong> to fully pay off this debt
-                      {payoffMonths > 0 && (
-                        <span> ({payoffMonths} {payoffMonths === 1 ? 'month' : 'months'})</span>
-                      )}
-                    </p>
-                  ) : (
-                    <p>
-                      <strong>Cannot calculate payoff time</strong> - Monthly payment not specified
-                    </p>
-                  )}
-                  <p style={{ fontSize: '0.9rem', marginTop: '5px', opacity: 0.8 }}>
-                    Note: This is a simple estimate. Interest rates may affect the actual payoff time.
-                  </p>
-                </div>
-              </div>
-            )
-          })}
-        </>
+                            {debtPayments.length > 0 && (
+                              <div className="expanded-section">
+                                <strong>Recent Payments ({debtPayments.length})</strong>
+                                <ul className="expanded-payments">
+                                  {debtPayments.slice(0, 5).map((payment) => (
+                                    <li key={payment._id || payment.createdAt}>
+                                      {formatCurrency(payment.amount)} - {payment.method} - {new Date(payment.date || payment.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                      {payment.note && <span className="payment-note-inline"> ({payment.note})</span>}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <div className="empty-state">
           <p>No debts added yet. Click the "Add Debt" button to get started!</p>

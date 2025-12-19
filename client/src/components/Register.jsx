@@ -87,9 +87,11 @@ function Register({ onRegister }) {
       }
 
       // Registration successful
-      // Show success message and switch to login
       alert('Registration successful! Please login with your credentials.')
-      onSwitchToLogin()
+      if (typeof onRegister === 'function') {
+        onRegister()
+      }
+      navigate('/login')
     } catch (err) {
       // Handle network errors
       if (err instanceof TypeError && err.message.includes('fetch')) {

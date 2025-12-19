@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import debtRoutes from './routes/debtRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -17,19 +18,69 @@ app.use(cors());
 // Parse JSON request bodies
 app.use(express.json());
 
-// Connect to MongoDB
+// Connect to MongoDB and start server only after successful connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/debt-tracker';
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(MONGODB_URI)
-  .then(() => {
+async function start() {
+  try {
+    console.log('🔌 Attempting to connect to MongoDB...');
+    console.log('📍 Connection string:', MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@'));
+    
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
+    });
+    
     console.log('✅ Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.error('❌ MongoDB connection error:', error.message);
-    console.error('⚠️  Server will continue running, but database operations will fail.');
-    console.error('⚠️  Please check your MONGODB_URI in the .env file.');
-  });
+    console.log('📊 Connection state:', mongoose.connection.readyState); // Should be 1 (connected)
+    console.log('🗄️  Database:', mongoose.connection.name);
+
+    // Optional: log connection state changes
+    mongoose.connection.on('disconnected', () => {
+      console.warn('⚠️  MongoDB disconnected');
+      console.log('📊 Connection state:', mongoose.connection.readyState);
+    });
+    mongoose.connection.on('reconnected', () => {
+      console.log('🔄 MongoDB reconnected');
+    });
+    mongoose.connection.on('error', (err) => {
+      console.error('❌ MongoDB error:', err.message);
+    });
+
+    // Try starting the server, falling back to the next available port if in use
+    const basePort = Number(PORT) || 5000;
+    let currentPort = basePort;
+
+    while (true) {
+      try {
+        await new Promise((resolve, reject) => {
+          const server = app.listen(currentPort, () => resolve());
+          server.on('error', (err) => reject(err));
+        });
+        console.log(`🚀 Server running on http://localhost:${currentPort}`);
+        break;
+      } catch (err) {
+        if (err && err.code === 'EADDRINUSE') {
+          console.warn(`⚠️  Port ${currentPort} in use. Trying ${currentPort + 1}...`);
+          currentPort += 1;
+          continue;
+        }
+        throw err;
+      }
+    }
+  } catch (error) {
+    console.error('❌ Startup error:', error.message);
+    console.error('📋 Full error:', error);
+    console.error('⚠️  Check your MONGODB_URI and network access settings.');
+    console.error('💡 Common issues:');
+    console.error('   - IP address not whitelisted in MongoDB Atlas');
+    console.error('   - Invalid username or password');
+    console.error('   - Network firewall blocking connection');
+    process.exit(1);
+  }
+}
+
+start();
 
 // Root route - provides API information
 app.get('/', (req, res) => {
@@ -54,6 +105,8 @@ app.get('/', (req, res) => {
 app.use('/api/debts', debtRoutes);
 // All user-related endpoints will be prefixed with /api/users
 app.use('/api/users', userRoutes);
+// Payment-related endpoints
+app.use('/api/payments', paymentRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -65,8 +118,5 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+// Server start moved to `start()` after successful DB connection
 
