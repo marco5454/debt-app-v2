@@ -26,6 +26,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Debug middleware to log all requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url} - ${req.path}`);
+  next();
+});
+
 // MongoDB connection
 let cachedConnection = null;
 
@@ -51,14 +57,18 @@ const connectToDatabase = async () => {
     }
     
     cachedConnection = await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 15000, // Increased timeout for serverless
-      connectTimeoutMS: 15000,
-      socketTimeoutMS: 15000,
+      serverSelectionTimeoutMS: 30000, // Longer timeout for serverless cold starts
+      connectTimeoutMS: 30000,
+      socketTimeoutMS: 45000,
       maxPoolSize: 1,
+      minPoolSize: 0,
       bufferCommands: false,
       bufferMaxEntries: 0,
       retryWrites: true,
-      w: 'majority'
+      w: 'majority',
+      // Additional options for better serverless compatibility
+      maxIdleTimeMS: 30000,
+      serverSelectionRetries: 3
     });
     
     console.log('✅ Connected to MongoDB');
@@ -189,6 +199,10 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/reports', reportRoutes);
 
 // Create serverless handler
-const handler = serverless(app);
+const handler = serverless(app, {
+  binary: false
+});
 
+// Export both named and default for compatibility
 export { handler };
+export const handler_default = handler;
