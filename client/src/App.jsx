@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import DebtForm from './components/DebtForm'
 import DebtList from './components/DebtList'
 import Dashboard from './components/Dashboard'
@@ -6,11 +7,118 @@ import Login from './components/Login'
 import Register from './components/Register'
 import './App.css'
 
+function ProtectedRoute({ isAuthenticated, children }) {
+  return isAuthenticated ? children : <Navigate to="/login" replace />
+}
+
+function AppContent({ 
+  debts, 
+  loading, 
+  error, 
+  isModalOpen, 
+  setIsModalOpen, 
+  handleLogout, 
+  fetchDebts, 
+  handleAddDebt, 
+  handleDeleteDebt 
+}) {
+  const location = useLocation()
+
+  return (
+    <div className="App">
+      <header className="header">
+        <div className="header-content">
+          <div>
+            <h1>💰 Debt Tracker</h1>
+            <p>Manage and track your debts</p>
+            <p className="username">Logged in as: {localStorage.getItem('username')}</p>
+          </div>
+          <div className="header-actions">
+            <button 
+              className="btn btn-primary btn-add-debt"
+              onClick={() => setIsModalOpen(true)}
+            >
+              + Add Debt
+            </button>
+            <button 
+              className="btn btn-secondary btn-logout"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <nav className="nav-bar">
+        <div className="nav-content">
+          <Link 
+            to="/dashboard" 
+            className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}
+          >
+            Dashboard
+          </Link>
+          <Link 
+            to="/debts" 
+            className={`nav-item ${location.pathname === '/debts' ? 'active' : ''}`}
+          >
+            All Debts
+          </Link>
+        </div>
+      </nav>
+
+      <Routes>
+        <Route path="/dashboard" element={
+          <div className="container">
+            {error && (
+              <div className="error">
+                <strong>Error:</strong> {error}
+              </div>
+            )}
+
+            {loading ? (
+              <div className="loading">Loading debts...</div>
+            ) : (
+              <Dashboard debts={debts} />
+            )}
+          </div>
+        } />
+        <Route path="/debts" element={
+          <div className="container">
+            {error && (
+              <div className="error">
+                <strong>Error:</strong> {error}
+              </div>
+            )}
+
+            {loading ? (
+              <div className="loading">Loading debts...</div>
+            ) : (
+              <DebtList debts={debts} onDeleteDebt={handleDeleteDebt} />
+            )}
+          </div>
+        } />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+
+      {/* Modal for adding debt */}
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <DebtForm 
+              onAddDebt={handleAddDebt} 
+              onClose={() => setIsModalOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function App() {
   // State to track authentication
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  // State to track if showing login or register
-  const [showRegister, setShowRegister] = useState(false)
   // State to store all debts
   const [debts, setDebts] = useState([])
   // State to track loading status
@@ -19,8 +127,6 @@ function App() {
   const [error, setError] = useState(null)
   // State to control modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false)
-  // State to control current view
-  const [currentView, setCurrentView] = useState('dashboard')
 
   // Check if user is logged in on mount
   useEffect(() => {
@@ -144,97 +250,38 @@ function App() {
     }
   }
 
-  // Show login or register screen if not authenticated
-  if (!isAuthenticated) {
-    return (
-      <div className="login-container">
-        {showRegister ? (
-          <Register 
-            onRegister={handleLogin}
-            onSwitchToLogin={() => setShowRegister(false)}
-          />
-        ) : (
-          <Login 
-            onLogin={handleLogin}
-            onSwitchToRegister={() => setShowRegister(true)}
-          />
-        )}
-      </div>
-    )
-  }
-
   return (
-    <div className="App">
-      <header className="header">
-        <div className="header-content">
-          <div>
-            <h1>💰 Debt Tracker</h1>
-            <p>Manage and track your debts</p>
-            <p className="username">Logged in as: {localStorage.getItem('username')}</p>
+    <Router>
+      <Routes>
+        <Route path="/login" element={
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : 
+          <div className="login-container">
+            <Login onLogin={handleLogin} />
           </div>
-          <div className="header-actions">
-            <button 
-              className="btn btn-primary btn-add-debt"
-              onClick={() => setIsModalOpen(true)}
-            >
-              + Add Debt
-            </button>
-            <button 
-              className="btn btn-secondary btn-logout"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+        } />
+        <Route path="/register" element={
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : 
+          <div className="login-container">
+            <Register onRegister={handleLogin} />
           </div>
-        </div>
-      </header>
-
-      <nav className="nav-bar">
-        <div className="nav-content">
-          <button 
-            className={`nav-item ${currentView === 'dashboard' ? 'active' : ''}`}
-            onClick={() => setCurrentView('dashboard')}
-          >
-            Dashboard
-          </button>
-          <button 
-            className={`nav-item ${currentView === 'debts' ? 'active' : ''}`}
-            onClick={() => setCurrentView('debts')}
-          >
-            All Debts
-          </button>
-        </div>
-      </nav>
-
-      <div className="container">
-        {error && (
-          <div className="error">
-            <strong>Error:</strong> {error}
-          </div>
-        )}
-
-        {loading ? (
-          <div className="loading">Loading debts...</div>
-        ) : (
-          <>
-            {currentView === 'dashboard' && <Dashboard debts={debts} />}
-            {currentView === 'debts' && <DebtList debts={debts} onDeleteDebt={handleDeleteDebt} />}
-          </>
-        )}
-      </div>
-
-      {/* Modal for adding debt */}
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <DebtForm 
-              onAddDebt={handleAddDebt} 
-              onClose={() => setIsModalOpen(false)}
+        } />
+        <Route path="/*" element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <AppContent 
+              debts={debts}
+              loading={loading}
+              error={error}
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+              handleLogout={handleLogout}
+              fetchDebts={fetchDebts}
+              handleAddDebt={handleAddDebt}
+              handleDeleteDebt={handleDeleteDebt}
             />
-          </div>
-        </div>
-      )}
-    </div>
+          </ProtectedRoute>
+        } />
+      </Routes>
+    </Router>
   )
 }
 

@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-function Register({ onRegister, onSwitchToLogin }) {
+function Register({ onRegister }) {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -176,7 +178,7 @@ function Register({ onRegister, onSwitchToLogin }) {
           <button 
             type="button" 
             className="link-button"
-            onClick={onSwitchToLogin}
+            onClick={() => navigate('/login')}
           >
             Sign In
           </button>

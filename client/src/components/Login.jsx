@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-function Login({ onLogin, onSwitchToRegister }) {
+function Login({ onLogin }) {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -150,7 +152,7 @@ function Login({ onLogin, onSwitchToRegister }) {
             <button 
               type="button" 
               className="link-button"
-              onClick={onSwitchToRegister}
+              onClick={() => navigate('/register')}
             >
               Register
             </button>
