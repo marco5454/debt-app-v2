@@ -44,8 +44,22 @@ const connectToDatabase = async () => {
   }
 };
 
+// Health check endpoint (before middleware)
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Debt Tracker API is running on Netlify Functions',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Middleware to ensure DB connection before handling requests
-app.use(async (req, res, next) => {
+app.use('/api', async (req, res, next) => {
+  // Skip DB connection for health check
+  if (req.path === '/health') {
+    return next();
+  }
+  
   try {
     await connectToDatabase();
     next();
@@ -56,15 +70,6 @@ app.use(async (req, res, next) => {
       message: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
   }
-});
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    message: 'Debt Tracker API is running on Netlify Functions',
-    timestamp: new Date().toISOString()
-  });
 });
 
 // Routes
