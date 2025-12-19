@@ -11,6 +11,14 @@ import serverless from 'serverless-http';
 // Load environment variables
 dotenv.config();
 
+// Debug environment variables
+console.log('Environment check:');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
+if (process.env.MONGODB_URI) {
+  console.log('MONGODB_URI format:', process.env.MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@'));
+}
+
 // Create Express app
 const app = express();
 
@@ -37,23 +45,44 @@ const connectToDatabase = async () => {
   console.log('URI format:', MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@'));
   
   try {
+    // First disconnect any existing connection
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.disconnect();
+    }
+    
     cachedConnection = await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 10000, // Increased timeout for serverless
+      serverSelectionTimeoutMS: 15000, // Increased timeout for serverless
+      connectTimeoutMS: 15000,
+      socketTimeoutMS: 15000,
       maxPoolSize: 1,
       bufferCommands: false,
       bufferMaxEntries: 0,
+      retryWrites: true,
+      w: 'majority'
     });
     
     console.log('✅ Connected to MongoDB');
     console.log('Database name:', mongoose.connection.name);
+    console.log('Connection state:', mongoose.connection.readyState);
     return cachedConnection;
   } catch (error) {
     console.error('❌ MongoDB connection error:', error.message);
     console.error('Error details:', {
       name: error.name,
       code: error.code,
-      codeName: error.codeName
+      codeName: error.codeName,
+      reason: error.reason
     });
+    
+    // Specific error messages for common issues
+    if (error.message.includes('Authentication failed')) {
+      throw new Error('MongoDB authentication failed - check username/password');
+    } else if (error.message.includes('connection timed out')) {
+      throw new Error('MongoDB connection timed out - check network access in Atlas');
+    } else if (error.message.includes('ENOTFOUND')) {
+      throw new Error('MongoDB cluster not found - check cluster URL');
+    }
+    
     throw error;
   }
 };
@@ -71,7 +100,8 @@ app.get('/api/health', async (req, res) => {
       database: {
         status: dbStatus,
         hasMongoUri,
-        connectionState: mongoose.connection.readyState
+        connectionState: mongoose.connection.readyState,
+        mongoUri: process.env.MONGODB_URI ? process.env.MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@') : 'Not set'
       },
       environment: {
         nodeEnv: process.env.NODE_ENV,
@@ -83,6 +113,38 @@ app.get('/api/health', async (req, res) => {
       status: 'ERROR',
       message: 'Health check failed',
       error: error.message
+    });
+  }
+});
+
+// Test database connection endpoint
+app.get('/api/test-db', async (req, res) => {
+  try {
+    console.log('Testing database connection...');
+    await connectToDatabase();
+    
+    // Try a simple operation
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    
+    res.json({
+      status: 'SUCCESS',
+      message: 'Database connection successful',
+      database: {
+        name: mongoose.connection.name,
+        collections: collections.map(c => c.name),
+        connectionState: mongoose.connection.readyState
+      }
+    });
+  } catch (error) {
+    console.error('Database test failed:', error);
+    res.status(500).json({
+      status: 'ERROR',
+      message: 'Database connection failed',
+      error: error.message,
+      details: {
+        name: error.name,
+        code: error.code
+      }
     });
   }
 });
