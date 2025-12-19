@@ -6,7 +6,10 @@ function DebtForm({ onAddDebt, onClose }) {
     name: '',
     totalAmount: '',
     interestRate: '',
-    monthlyPayment: ''
+    monthlyPayment: '',
+    dateOfLoan: '',
+    creditor: '',
+    description: ''
   })
   // Loading state for form submission
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -32,14 +35,14 @@ function DebtForm({ onAddDebt, onClose }) {
     setFormError('')
 
     // Validate required fields
-    if (!formData.name.trim() || !formData.totalAmount || !formData.monthlyPayment) {
+    if (!formData.name.trim() || !formData.totalAmount || !formData.dateOfLoan) {
       setFormError('Please fill in all required fields')
       return
     }
 
     // Validate numeric values
     const totalAmount = parseFloat(formData.totalAmount)
-    const monthlyPayment = parseFloat(formData.monthlyPayment)
+    const monthlyPayment = formData.monthlyPayment ? parseFloat(formData.monthlyPayment) : 0
     const interestRate = formData.interestRate ? parseFloat(formData.interestRate) : 0
 
     if (isNaN(totalAmount) || totalAmount <= 0) {
@@ -47,7 +50,7 @@ function DebtForm({ onAddDebt, onClose }) {
       return
     }
 
-    if (isNaN(monthlyPayment) || monthlyPayment <= 0) {
+    if (formData.monthlyPayment && (isNaN(monthlyPayment) || monthlyPayment <= 0)) {
       setFormError('Monthly payment must be a positive number')
       return
     }
@@ -67,7 +70,10 @@ function DebtForm({ onAddDebt, onClose }) {
       name: formData.name.trim(),
       totalAmount,
       monthlyPayment,
-      interestRate
+      interestRate,
+      dateOfLoan: formData.dateOfLoan,
+      creditor: formData.creditor.trim(),
+      description: formData.description.trim()
     }
 
     try {
@@ -79,7 +85,10 @@ function DebtForm({ onAddDebt, onClose }) {
         name: '',
         totalAmount: '',
         interestRate: '',
-        monthlyPayment: ''
+        monthlyPayment: '',
+        dateOfLoan: '',
+        creditor: '',
+        description: ''
       })
       
       // Close modal after successful submission
@@ -164,7 +173,7 @@ function DebtForm({ onAddDebt, onClose }) {
 
         <div className="form-group">
           <label htmlFor="monthlyPayment">
-            Monthly Payment (₱) <span style={{ color: 'red' }}>*</span>
+            Monthly Payment (₱) <small>(optional)</small>
           </label>
           <input
             type="number"
@@ -175,7 +184,49 @@ function DebtForm({ onAddDebt, onClose }) {
             placeholder="0.00"
             step="0.01"
             min="0.01"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="dateOfLoan">
+            Date of Loan <span style={{ color: 'red' }}>*</span>
+          </label>
+          <input
+            type="date"
+            id="dateOfLoan"
+            name="dateOfLoan"
+            value={formData.dateOfLoan}
+            onChange={handleChange}
             required
+          />
+          <small>When did you take this loan?</small>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="creditor">
+            Creditor/Lender <small>(optional)</small>
+          </label>
+          <input
+            type="text"
+            id="creditor"
+            name="creditor"
+            value={formData.creditor}
+            onChange={handleChange}
+            placeholder="e.g., Bank ABC, Credit Card Company"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="description">
+            Description/Notes <small>(optional)</small>
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Additional notes about this debt..."
+            rows="3"
           />
         </div>
 

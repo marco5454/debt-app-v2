@@ -100,6 +100,7 @@ function DebtList({ debts, onDeleteDebt }) {
         {debts.length > 5 && (
           <p className="debt-list-subtitle">
             Showing top 5 of {debts.length} debts based on balance, payoff time, and monthly payment
+            {debts.some(debt => debt.monthlyPayment === 0) && ' (some debts have no monthly payment specified)'}
           </p>
         )}
       </div>
@@ -143,7 +144,9 @@ function DebtList({ debts, onDeleteDebt }) {
 
                   <div className="detail-item">
                     <span className="detail-label">Monthly Payment</span>
-                    <span className="detail-value">{formatCurrency(debt.monthlyPayment)}</span>
+                    <span className="detail-value">
+                      {debt.monthlyPayment > 0 ? formatCurrency(debt.monthlyPayment) : 'Not specified'}
+                    </span>
                   </div>
 
                   <div className="detail-item">
@@ -152,17 +155,48 @@ function DebtList({ debts, onDeleteDebt }) {
                       {debt.interestRate > 0 ? formatPercentage(debt.interestRate) : 'None'}
                     </span>
                   </div>
+
+                  <div className="detail-item">
+                    <span className="detail-label">Date of Loan</span>
+                    <span className="detail-value">
+                      {debt.dateOfLoan ? new Date(debt.dateOfLoan).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      }) : 'N/A'}
+                    </span>
+                  </div>
+
+                  {debt.creditor && (
+                    <div className="detail-item">
+                      <span className="detail-label">Creditor</span>
+                      <span className="detail-value">{debt.creditor}</span>
+                    </div>
+                  )}
                 </div>
+
+                {debt.description && (
+                  <div className="debt-description">
+                    <h4>Description</h4>
+                    <p>{debt.description}</p>
+                  </div>
+                )}
 
                 {/* Payoff Information */}
                 <div className="payoff-info">
                   <h4>Payoff Estimate</h4>
-                  <p>
-                    <strong>{payoffDuration}</strong> to fully pay off this debt
-                    {payoffMonths > 0 && (
-                      <span> ({payoffMonths} {payoffMonths === 1 ? 'month' : 'months'})</span>
-                    )}
-                  </p>
+                  {debt.monthlyPayment > 0 ? (
+                    <p>
+                      <strong>{payoffDuration}</strong> to fully pay off this debt
+                      {payoffMonths > 0 && (
+                        <span> ({payoffMonths} {payoffMonths === 1 ? 'month' : 'months'})</span>
+                      )}
+                    </p>
+                  ) : (
+                    <p>
+                      <strong>Cannot calculate payoff time</strong> - Monthly payment not specified
+                    </p>
+                  )}
                   <p style={{ fontSize: '0.9rem', marginTop: '5px', opacity: 0.8 }}>
                     Note: This is a simple estimate. Interest rates may affect the actual payoff time.
                   </p>

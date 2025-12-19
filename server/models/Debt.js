@@ -34,8 +34,28 @@ const debtSchema = new mongoose.Schema({
   // Monthly payment amount
   monthlyPayment: {
     type: Number,
-    required: [true, 'Monthly payment is required'],
-    min: [0.01, 'Monthly payment must be greater than 0']
+    default: 0,
+    min: [0, 'Monthly payment cannot be negative']
+  },
+  
+  // Date when the loan was taken
+  dateOfLoan: {
+    type: Date,
+    required: [true, 'Date of loan is required']
+  },
+  
+  // Creditor/lender name (optional)
+  creditor: {
+    type: String,
+    trim: true,
+    default: ''
+  },
+  
+  // Additional description/notes (optional)
+  description: {
+    type: String,
+    trim: true,
+    default: ''
   }
 }, {
   // Automatically add createdAt and updatedAt timestamps

@@ -8,7 +8,9 @@ function Dashboard({ debts }) {
 
   // Calculate total monthly payment commitment
   const totalMonthlyPayment = useMemo(() => {
-    return debts.reduce((sum, debt) => sum + debt.monthlyPayment, 0)
+    return debts
+      .filter(debt => debt.monthlyPayment > 0)
+      .reduce((sum, debt) => sum + debt.monthlyPayment, 0)
   }, [debts])
 
   // Calculate estimated debt-free date
@@ -119,6 +121,17 @@ function Dashboard({ debts }) {
           </div>
           <div className="dashboard-subtext">
             {progress === 0 ? 'Start your journey to debt freedom!' : 'Keep going!'}
+          </div>
+        </div>
+
+        {/* 5. Total Debts */}
+        <div className="dashboard-card">
+          <div className="dashboard-label">Total Debts</div>
+          <div className="dashboard-value">
+            {debts.length}
+          </div>
+          <div className="dashboard-subtext">
+            {debts.length === 1 ? 'debt' : 'debts'} to track
           </div>
         </div>
       </div>

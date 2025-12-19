@@ -49,21 +49,21 @@ router.get('/', async (req, res) => {
 });
 
 // POST /debts - Create a new debt
-// Expects JSON body with: userId, name, totalAmount, interestRate (optional), monthlyPayment
+// Expects JSON body with: userId, name, totalAmount, interestRate (optional), monthlyPayment (optional), dateOfLoan, creditor (optional), description (optional)
 router.post('/', async (req, res) => {
   try {
     // Extract debt data from request body
-    const { userId, name, totalAmount, interestRate, monthlyPayment } = req.body;
+    const { userId, name, totalAmount, interestRate, monthlyPayment, dateOfLoan, creditor, description } = req.body;
     
     // Validate required fields
-    if (!userId || !name || !totalAmount || !monthlyPayment) {
+    if (!userId || !name || !totalAmount || !dateOfLoan) {
       return res.status(400).json({ 
-        message: 'Missing required fields: userId, name, totalAmount, and monthlyPayment are required' 
+        message: 'Missing required fields: userId, name, totalAmount, and dateOfLoan are required' 
       });
     }
     
-    // Validate that monthly payment is less than total amount
-    if (monthlyPayment >= totalAmount) {
+    // Validate that monthly payment is less than total amount (if provided)
+    if (monthlyPayment && monthlyPayment >= totalAmount) {
       return res.status(400).json({ 
         message: 'Monthly payment must be less than total amount' 
       });
@@ -75,7 +75,10 @@ router.post('/', async (req, res) => {
       name,
       totalAmount,
       interestRate: interestRate || 0,
-      monthlyPayment
+      monthlyPayment: monthlyPayment || 0,
+      dateOfLoan: new Date(dateOfLoan),
+      creditor: creditor || '',
+      description: description || ''
     });
     
     // Save to database

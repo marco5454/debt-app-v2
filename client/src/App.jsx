@@ -19,6 +19,8 @@ function App() {
   const [error, setError] = useState(null)
   // State to control modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false)
+  // State to control current view
+  const [currentView, setCurrentView] = useState('dashboard')
 
   // Check if user is logged in on mount
   useEffect(() => {
@@ -168,6 +170,7 @@ function App() {
           <div>
             <h1>💰 Debt Tracker</h1>
             <p>Manage and track your debts</p>
+            <p className="username">Logged in as: {localStorage.getItem('username')}</p>
           </div>
           <div className="header-actions">
             <button 
@@ -186,6 +189,23 @@ function App() {
         </div>
       </header>
 
+      <nav className="nav-bar">
+        <div className="nav-content">
+          <button 
+            className={`nav-item ${currentView === 'dashboard' ? 'active' : ''}`}
+            onClick={() => setCurrentView('dashboard')}
+          >
+            Dashboard
+          </button>
+          <button 
+            className={`nav-item ${currentView === 'debts' ? 'active' : ''}`}
+            onClick={() => setCurrentView('debts')}
+          >
+            All Debts
+          </button>
+        </div>
+      </nav>
+
       <div className="container">
         {error && (
           <div className="error">
@@ -197,8 +217,8 @@ function App() {
           <div className="loading">Loading debts...</div>
         ) : (
           <>
-            <Dashboard debts={debts} />
-            <DebtList debts={debts} onDeleteDebt={handleDeleteDebt} />
+            {currentView === 'dashboard' && <Dashboard debts={debts} />}
+            {currentView === 'debts' && <DebtList debts={debts} onDeleteDebt={handleDeleteDebt} />}
           </>
         )}
       </div>
