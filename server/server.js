@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import debtRoutes from './routes/debtRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -94,7 +95,9 @@ app.get('/', (req, res) => {
       deleteDebt: 'DELETE /api/debts/:id',
       registerUser: 'POST /api/users/register',
       loginUser: 'POST /api/users/login',
-      getAllUsers: 'GET /api/users'
+      getAllUsers: 'GET /api/users',
+      createReport: 'POST /api/reports',
+      getAllReports: 'GET /api/reports'
     },
     status: mongoose.connection.readyState === 1 ? 'Connected to MongoDB' : 'MongoDB not connected'
   });
@@ -107,6 +110,8 @@ app.use('/api/debts', debtRoutes);
 app.use('/api/users', userRoutes);
 // Payment-related endpoints
 app.use('/api/payments', paymentRoutes);
+// Report-related endpoints
+app.use('/api/reports', reportRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

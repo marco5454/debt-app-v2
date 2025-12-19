@@ -1875,19 +1875,54 @@ body {
 }
 
 .dashboard-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 40px;
+  padding: 0 10px;
 }
 
-.dashboard-header h1 {
+.dashboard-title-section {
+  text-align: left;
+  flex: 1;
+}
+
+.dashboard-title-section h1 {
   font-size: 2.5rem;
   color: #2c3e50;
   margin-bottom: 8px;
   font-weight: 700;
 }
 
-.dashboard-header p {
+.dashboard-title-section p {
   color: #7f8c8d;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Report Button */
+.btn-report {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.btn-report:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+}
+
+.report-icon {
   font-size: 1.1rem;
 }
 
@@ -2288,6 +2323,275 @@ body {
   color: #6c757d;
   font-weight: normal;
   margin-left: 4px;
+}
+
+/* Report Modal Styles */
+.report-modal {
+  max-width: 650px;
+  width: 100%;
+  max-height: 90vh;
+  border-radius: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+}
+
+.report-form {
+  max-width: 100%;
+  width: 100%;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fb 100%);
+  padding: 35px;
+  min-height: auto;
+}
+
+.report-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  padding-bottom: 25px;
+  border-bottom: 3px solid transparent;
+  background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #e74c3c, #3498db) border-box;
+  position: relative;
+}
+
+.report-form-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, #e74c3c 0%, #3498db 100%);
+  border-radius: 2px;
+}
+
+.report-form-header h2 {
+  color: #1a1a1a;
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.report-form .form-group {
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.report-form .form-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #2c3e50;
+  font-weight: 700;
+  font-size: 0.98rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.report-form .form-group label::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(135deg, #e74c3c, #3498db);
+  border-radius: 1px;
+}
+
+.report-form .form-group input,
+.report-form .form-group select,
+.report-form .form-group textarea {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #fff;
+  font-family: inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  position: relative;
+}
+
+.report-form .form-group input:focus,
+.report-form .form-group select:focus,
+.report-form .form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.report-form .form-group input:hover:not(:focus),
+.report-form .form-group select:hover:not(:focus),
+.report-form .form-group textarea:hover:not(:focus) {
+  border-color: #bdc3c7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.report-form .form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.report-form .form-group textarea[rows="4"] {
+  min-height: 120px;
+}
+
+.report-form .form-group textarea[rows="3"] {
+  min-height: 100px;
+}
+
+.report-form .form-group small {
+  color: #6c757d;
+  font-weight: normal;
+  margin-left: 4px;
+}
+
+.report-form-actions {
+  display: flex;
+  gap: 18px;
+  justify-content: flex-end;
+  margin-top: 40px;
+  padding-top: 30px;
+  position: relative;
+}
+
+.report-form-actions::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -35px;
+  right: -35px;
+  height: 3px;
+  background: linear-gradient(135deg, #e74c3c 0%, #3498db 100%);
+  border-radius: 2px;
+  opacity: 0.3;
+}
+
+.report-form .btn {
+  padding: 16px 32px;
+  font-weight: 700;
+  border-radius: 12px;
+  font-size: 0.98rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 130px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.report-form .btn-primary {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border: none;
+  color: white;
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+}
+
+.report-form .btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.report-form .btn-primary:hover::before {
+  left: 100%;
+}
+
+.report-form .btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+}
+
+.report-form .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.report-form .btn-secondary {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px solid #bdc3c7;
+  color: #5a6c7d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.report-form .btn-secondary:hover {
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+  border-color: #95a5a6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  color: #2c3e50;
+}
+
+/* Mobile Responsiveness for Report Form */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+  
+  .dashboard-title-section {
+    text-align: center;
+  }
+  
+  .btn-report {
+    align-self: center;
+  }
+  
+  .report-modal {
+    max-width: 95vw;
+    margin: 10px;
+  }
+  
+  .report-form {
+    padding: 25px 20px;
+  }
+  
+  .report-form-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .report-form-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .report-form .btn {
+    width: 100%;
+    min-width: auto;
+    padding: 14px 24px;
+  }
+  
+  .report-form-actions::before {
+    left: -20px;
+    right: -20px;
+  }
 }
 
 /* Payments Page Styles */
