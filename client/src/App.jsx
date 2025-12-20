@@ -38,9 +38,15 @@ function AppContent({
     <div className="App">
       <div className="main-content">
         {notification && (
-          <div className={`notification ${notification.type === 'debt' ? 'notification-debt' : 'notification-success'}`}>
+          <div className={`notification ${
+            notification.type === 'debt' ? 'notification-debt' : 
+            notification.type === 'logout' ? 'notification-logout' :
+            'notification-success'
+          }`}>
             {notification.type === 'debt' ? (
               <>📋 {notification.message}</>
+            ) : notification.type === 'logout' ? (
+              <>⏰ {notification.message}</>
             ) : (
               <>✓ You paid <strong>{notification.amount}</strong> successfully!</>
             )}
@@ -203,11 +209,100 @@ function App() {
     }
   }, [])
 
+  // Auto-logout functionality when tab/browser is closed for 15 seconds
+  useEffect(() => {
+    if (!isAuthenticated) return
+
+    let lastActiveTime = Date.now()
+    
+    const updateLastActiveTime = () => {
+      lastActiveTime = Date.now()
+      localStorage.setItem('lastActiveTime', lastActiveTime.toString())
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Tab/browser became hidden - update last active time
+        updateLastActiveTime()
+      } else {
+        // Tab/browser became visible - check if 2 minutes have passed
+        const storedLastActiveTime = localStorage.getItem('lastActiveTime')
+        const lastActive = storedLastActiveTime ? parseInt(storedLastActiveTime) : lastActiveTime
+        const timePassed = Date.now() - lastActive
+        
+        // If more than 2 minutes (120000ms) have passed, log out
+        if (timePassed > 120000) {
+          console.log('Auto-logout: Session expired after', Math.round(timePassed/1000), 'seconds')
+          handleAutoLogout()
+          return
+        }
+        
+        // Update last active time when user returns
+        updateLastActiveTime()
+      }
+    }
+
+    const handleBeforeUnload = () => {
+      // Update last active time when page is being unloaded
+      updateLastActiveTime()
+    }
+
+    const handleFocus = () => {
+      // Check session when window gains focus
+      const storedLastActiveTime = localStorage.getItem('lastActiveTime')
+      if (storedLastActiveTime) {
+        const lastActive = parseInt(storedLastActiveTime)
+        const timePassed = Date.now() - lastActive
+        
+        if (timePassed > 120000) {
+          console.log('Auto-logout: Session expired after', Math.round(timePassed/1000), 'seconds')
+          handleAutoLogout()
+          return
+        }
+      }
+      updateLastActiveTime()
+    }
+
+    // Initialize last active time
+    updateLastActiveTime()
+
+    // Add event listeners
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    window.addEventListener('focus', handleFocus)
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+      window.removeEventListener('focus', handleFocus)
+    }
+  }, [isAuthenticated])
+
   // Handle login
   const handleLogin = () => {
     setError(null)
     setIsAuthenticated(true)
+    // Initialize last active time when user logs in
+    localStorage.setItem('lastActiveTime', Date.now().toString())
     fetchDebts()
+  }
+
+  // Handle automatic logout with notification
+  const handleAutoLogout = () => {
+    // Show notification for auto-logout
+    setNotification({
+      type: 'logout',
+      message: 'Session expired due to inactivity for more than 2 minutes'
+    })
+    
+    // Clear the notification after 5 seconds
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+    
+    // Perform logout
+    handleLogout()
   }
 
   // Handle logout
@@ -215,6 +310,7 @@ function App() {
     localStorage.removeItem('isLoggedIn')
     localStorage.removeItem('username')
     localStorage.removeItem('userId')
+    localStorage.removeItem('lastActiveTime') // Clean up auto-logout timestamp
     setIsAuthenticated(false)
     setDebts([])
     setError(null)

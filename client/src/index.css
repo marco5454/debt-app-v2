@@ -1376,6 +1376,12 @@ body {
   border: 1px solid #2c3e50;
 }
 
+.notification-logout {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  border: 1px solid #a93226;
+}
+
 .debt-description {
   margin-top: 20px;
   padding: 18px;

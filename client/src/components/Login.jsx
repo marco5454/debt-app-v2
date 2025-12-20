@@ -78,6 +78,7 @@ function Login({ onLogin }) {
       localStorage.setItem('isLoggedIn', 'true')
       localStorage.setItem('username', data.user.username)
       localStorage.setItem('userId', data.user._id)
+      localStorage.setItem('lastActiveTime', Date.now().toString()) // Initialize auto-logout timestamp
       
       // Call the onLogin callback
       onLogin()
