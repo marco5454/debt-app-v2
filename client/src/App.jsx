@@ -321,6 +321,10 @@ function App() {
   const [initialLoading, setInitialLoading] = useState(true)
   // State for post-login loading
   const [postLoginLoading, setPostLoginLoading] = useState(false)
+  // State for logout loading
+  const [logoutLoading, setLogoutLoading] = useState(false)
+  // State for registration loading
+  const [registrationLoading, setRegistrationLoading] = useState(false)
   // State to track errors
   const [error, setError] = useState(null)
   // State to control modal visibility
@@ -442,8 +446,30 @@ function App() {
     setPostLoginLoading(false)
   }
 
+  // Handle registration with loading
+  const handleRegistration = async () => {
+    setRegistrationLoading(true)
+    
+    // Show loading animation for 2 seconds
+    const loadingPromise = new Promise(resolve => setTimeout(resolve, 2000))
+    
+    setError(null)
+    setIsAuthenticated(true)
+    localStorage.setItem('lastActiveTime', Date.now().toString())
+    
+    // Wait for both data fetching and minimum loading time
+    await Promise.all([fetchDebts(), loadingPromise])
+    
+    setRegistrationLoading(false)
+  }
+
   // Handle automatic logout with notification
-  const handleAutoLogout = () => {
+  const handleAutoLogout = async () => {
+    setLogoutLoading(true)
+    
+    // Show loading animation for 1.5 seconds
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    
     // Show notification for auto-logout
     setNotification({
       type: 'logout',
@@ -456,21 +482,50 @@ function App() {
     }, 5000)
     
     // Perform logout
-    handleLogout()
+    handleLogout(true) // Skip loading since we already showed it
   }
 
   // Handle logout
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn')
-    localStorage.removeItem('username')
-    localStorage.removeItem('userId')
-    localStorage.removeItem('lastActiveTime') // Clean up auto-logout timestamp
-    setIsAuthenticated(false)
-    setDebts([])
-    setError(null)
-    setLoading(false)
-    setEditingDebt(null)
-    setPaymentDebt(null)
+  const handleLogout = async (skipLoading = false) => {
+    if (!skipLoading) {
+      setLogoutLoading(true)
+      
+      // Use setTimeout to ensure the loading state is rendered before continuing
+      await new Promise(resolve => {
+        setTimeout(async () => {
+          // Show loading animation for 1.5 seconds
+          await new Promise(resolve2 => setTimeout(resolve2, 1500))
+          
+          // Perform logout actions
+          localStorage.removeItem('isLoggedIn')
+          localStorage.removeItem('username')
+          localStorage.removeItem('userId')
+          localStorage.removeItem('lastActiveTime')
+          setIsAuthenticated(false)
+          setDebts([])
+          setError(null)
+          setLoading(false)
+          setEditingDebt(null)
+          setPaymentDebt(null)
+          setLogoutLoading(false)
+          
+          resolve()
+        }, 50) // Small delay to ensure state update is rendered
+      })
+    } else {
+      // Immediate logout without loading animation
+      localStorage.removeItem('isLoggedIn')
+      localStorage.removeItem('username')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('lastActiveTime')
+      setIsAuthenticated(false)
+      setDebts([])
+      setError(null)
+      setLoading(false)
+      setEditingDebt(null)
+      setPaymentDebt(null)
+      setLogoutLoading(false)
+    }
   }
 
   // Fetch all debts from the backend API for the logged-in user
@@ -691,6 +746,36 @@ function App() {
     )
   }
 
+  // Show registration loading animation
+  if (registrationLoading) {
+    return (
+      <div className="initial-loading-container">
+        <div className="loading-animation">
+          <div className="spinner"></div>
+          <div className="loading-text">
+            <h2>Welcome!</h2>
+            <p>Creating your account...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Show logout loading animation
+  if (logoutLoading) {
+    return (
+      <div className="initial-loading-container">
+        <div className="loading-animation">
+          <div className="spinner"></div>
+          <div className="loading-text">
+            <h2>Logging Out</h2>
+            <p>Securing your session...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Router>
       <Routes>
@@ -703,7 +788,7 @@ function App() {
         <Route path="/register" element={
           isAuthenticated ? <Navigate to="/dashboard" replace /> : 
           <div className="login-container">
-            <Register onRegister={handleLogin} />
+            <Register onRegister={handleRegistration} />
           </div>
         } />
         <Route path="/*" element={
