@@ -75,11 +75,6 @@ function AppContent({
               <span className="hamburger-line"></span>
               <span className="hamburger-line"></span>
             </button>
-            <div className="header-info">
-              <h1 className="app-title">💰 Debt Tracker</h1>
-              <p className="tagline">Manage and track your debts</p>
-              <p className="username">Logged in as: {localStorage.getItem('username')}</p>
-            </div>
             <div className="header-actions desktop-only">
               <button 
                 className="btn btn-primary btn-add-debt"
