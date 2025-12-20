@@ -1,3 +1,23 @@
+/* Global Page Centering */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 /* App-specific styles with full theme implementation */
 .App {
   min-height: 100vh;
@@ -14,6 +34,10 @@
   flex-direction: column;
   background-color: var(--bg-secondary);
   position: relative;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0 20px;
 }
 
 /* Header and Navigation */
@@ -126,12 +150,16 @@
 /* Container styles */
 .container {
   max-width: 1200px;
+  width: 100%;
   margin: 2rem auto;
   padding: 2rem;
   background-color: var(--bg-primary);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Dashboard specific styles */
@@ -143,6 +171,12 @@
   color: var(--text-white);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .dashboard-header h2 {
@@ -161,6 +195,10 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+  align-items: center;
 }
 
 .stat-card {
@@ -315,6 +353,10 @@
 /* Form styles */
 .form-group {
   margin-bottom: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .form-group label {
@@ -324,6 +366,8 @@
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 0.25px;
+  text-align: left;
+  width: 100%;
 }
 
 .form-control {
@@ -336,6 +380,7 @@
   background-color: #FFFFFF;
   color: #333333;
   font-family: inherit;
+  box-sizing: border-box;
 }
 
 .form-control:focus {
@@ -414,6 +459,10 @@
   overflow: hidden;
   position: relative;
   animation: modalSlideUp 0.3s ease;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @keyframes modalSlideUp {
@@ -819,9 +868,15 @@
   }
   
   .container {
-    margin: 0.5rem;
+    margin: 0.5rem auto;
     padding: 1rem;
     border-radius: var(--radius-md);
+    max-width: 100%;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   .stats-container {
@@ -1543,12 +1598,23 @@
 .debts-page {
   padding: 32px;
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .debts-page-header {
   text-align: center;
   margin-bottom: 48px;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .debts-page-header h1 {
@@ -1568,6 +1634,9 @@
   margin-bottom: 40px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
 }
 
 .search-box {
@@ -1619,6 +1688,10 @@
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 32px;
   margin-top: 32px;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+  align-items: start;
 }
 
 .debt-card {
@@ -1872,6 +1945,12 @@
   border-radius: 16px;
   border: 3px dashed #E0E0E0;
   margin-top: 32px;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .empty-icon, .no-results-icon {
@@ -1896,6 +1975,18 @@
 @media (max-width: 768px) {
   .debts-page {
     padding: 20px;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .debts-page-header {
+    width: 100%;
+    max-width: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .debts-page-header h1 {
@@ -1909,10 +2000,15 @@
   .debts-grid {
     grid-template-columns: 1fr;
     gap: 24px;
+    width: 100%;
+    justify-items: center;
+    align-items: start;
   }
 
   .debt-card {
     padding: 24px;
+    width: 100%;
+    max-width: 500px;
   }
 
   .debt-card-header {
