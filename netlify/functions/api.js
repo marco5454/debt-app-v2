@@ -82,11 +82,11 @@ const connectToDatabase = async () => {
     
     // Specific error messages for common issues
     if (error.message.includes('Authentication failed')) {
-      throw new Error('MongoDB authentication failed - check username/password');
+      throw new Error('Service authentication failed - please try again later');
     } else if (error.message.includes('connection timed out')) {
-      throw new Error('MongoDB connection timed out - check network access in Atlas');
+      throw new Error('Service connection timed out - please try again');
     } else if (error.message.includes('ENOTFOUND')) {
-      throw new Error('MongoDB cluster not found - check cluster URL');
+      throw new Error('Service temporarily unavailable - please try again later');
     }
     
     throw error;
@@ -169,15 +169,15 @@ app.use('/api', async (req, res, next) => {
   } catch (error) {
     console.error('Database connection failed:', error);
     
-    let errorMessage = 'Database connection failed';
+    let errorMessage = 'Service temporarily unavailable';
     let details = {};
     
     if (error.message.includes('MONGODB_URI')) {
-      errorMessage = 'MongoDB URI not configured';
-      details.hint = 'Please set MONGODB_URI environment variable in Netlify';
+      errorMessage = 'Service configuration issue';
+      details.hint = 'Please try again in a few moments';
     } else if (error.name === 'MongoServerSelectionError') {
-      errorMessage = 'Cannot connect to MongoDB server';
-      details.hint = 'Check MongoDB Atlas network access settings';
+      errorMessage = 'Unable to connect to service';
+      details.hint = 'Please check your internet connection and try again';
     }
     
     res.status(500).json({ 

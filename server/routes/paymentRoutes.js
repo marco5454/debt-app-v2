@@ -9,8 +9,8 @@ const router = express.Router();
 const checkDatabaseConnection = (req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
     return res.status(503).json({
-      message: 'Database not connected. Please check your MongoDB connection string in the .env file.',
-      error: 'MongoDB connection failed',
+      message: 'Service temporarily unavailable. Please try again in a few moments.',
+      error: 'Service unavailable',
     });
   }
   next();
