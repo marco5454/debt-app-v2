@@ -1,0 +1,199 @@
+/* Theme Variables - Feedback Colors for Financial App */
+:root {
+  /* Typography - Professional fonts for financial applications */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-headings: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* Info Colors (Blues) - For general info, primary actions */
+  --color-info-900: #003388;
+  --color-info-800: #0057E4;
+  --color-info-700: #0070FF;
+  --color-info-600: #0088FF;
+  --color-info-500: #3498db; /* Main blue */
+  --color-info-400: #6FB9F5;
+  --color-info-300: #9FCDFF;
+  --color-info-200: #C7E0FF;
+  --color-info-100: #E5F2FF;
+  --color-info-50: #F0F7FF;
+
+  /* Success Colors (Greens) - For paid debts, positive actions */
+  --color-success-900: #185E0D;
+  --color-success-800: #398E3C;
+  --color-success-700: #4CAF50;
+  --color-success-600: #66C784;
+  --color-success-500: #27ae60; /* Main green */
+  --color-success-400: #8DD49E;
+  --color-success-300: #B5E5C4;
+  --color-success-200: #D4EDDA;
+  --color-success-100: #E8F5E8;
+  --color-success-50: #FFFFFF;
+
+  /* Warning Colors (Orange/Yellow) - For alerts, pending items */
+  --color-warning-900: #FF8800;
+  --color-warning-800: #FF9900;
+  --color-warning-700: #FFA500;
+  --color-warning-600: #FFCC00;
+  --color-warning-500: #f39c12; /* Main orange */
+  --color-warning-400: #FFD039;
+  --color-warning-300: #FFDD66;
+  --color-warning-200: #FFE999;
+  --color-warning-100: #FFF4CC;
+  --color-warning-50: #FFF8A0;
+
+  /* Error Colors (Reds) - For overdue debts, errors */
+  --color-error-900: #C70101;
+  --color-error-800: #F10000;
+  --color-error-700: #FF2C2C;
+  --color-error-600: #FF6666;
+  --color-error-500: #e74c3c; /* Main red */
+  --color-error-400: #FF9999;
+  --color-error-300: #FFCCCC;
+  --color-error-200: #FFD6D6;
+  --color-error-100: #FFE5E5;
+  --color-error-50: #FFFFFF;
+
+  /* Neutral Colors - For backgrounds, text, borders */
+  --color-neutral-900: #2c3e50;
+  --color-neutral-800: #34495e;
+  --color-neutral-700: #4a5a6a;
+  --color-neutral-600: #6c757d;
+  --color-neutral-500: #7f8c8d;
+  --color-neutral-400: #95a5a6;
+  --color-neutral-300: #bdc3c7;
+  --color-neutral-200: #dee2e6;
+  --color-neutral-100: #ecf0f1;
+  --color-neutral-50: #f8f9fa;
+  --color-white: #ffffff;
+
+  /* Semantic Colors */
+  --color-primary: var(--color-info-500);
+  --color-primary-hover: var(--color-info-600);
+  --color-primary-light: var(--color-info-100);
+  
+  --color-secondary: var(--color-neutral-500);
+  --color-secondary-hover: var(--color-neutral-600);
+  
+  --color-success: var(--color-success-500);
+  --color-success-hover: var(--color-success-600);
+  --color-success-light: var(--color-success-100);
+  
+  --color-warning: var(--color-warning-500);
+  --color-warning-hover: var(--color-warning-600);
+  --color-warning-light: var(--color-warning-100);
+  
+  --color-error: var(--color-error-500);
+  --color-error-hover: var(--color-error-600);
+  --color-error-light: var(--color-error-100);
+
+  /* Background Colors */
+  --bg-primary: var(--color-white);
+  --bg-secondary: var(--color-neutral-50);
+  --bg-dark: var(--color-neutral-900);
+  --bg-success: var(--color-success-light);
+  --bg-warning: var(--color-warning-light);
+  --bg-error: var(--color-error-light);
+
+  /* Text Colors */
+  --text-primary: var(--color-neutral-900);
+  --text-secondary: var(--color-neutral-600);
+  --text-muted: var(--color-neutral-500);
+  --text-white: var(--color-white);
+  --text-success: var(--color-success-700);
+  --text-warning: var(--color-warning-700);
+  --text-error: var(--color-error-700);
+
+  /* Border Colors */
+  --border-light: var(--color-neutral-200);
+  --border-medium: var(--color-neutral-300);
+  --border-dark: var(--color-neutral-400);
+
+  /* Shadow */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+}
+
+/* Status-specific utility classes */
+.status-paid {
+  background-color: var(--bg-success);
+  color: var(--text-success);
+  border-color: var(--color-success-300);
+}
+
+.status-overdue {
+  background-color: var(--bg-error);
+  color: var(--text-error);
+  border-color: var(--color-error-300);
+}
+
+.status-pending {
+  background-color: var(--bg-warning);
+  color: var(--text-warning);
+  border-color: var(--color-warning-300);
+}
+
+.status-active {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+
+/* Button variants */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--text-white);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: var(--text-white);
+  border-color: var(--color-success);
+}
+
+.btn-success:hover {
+  background-color: var(--color-success-hover);
+  border-color: var(--color-success-hover);
+}
+
+.btn-warning {
+  background-color: var(--color-warning);
+  color: var(--text-white);
+  border-color: var(--color-warning);
+}
+
+.btn-warning:hover {
+  background-color: var(--color-warning-hover);
+  border-color: var(--color-warning-hover);
+}
+
+.btn-error {
+  background-color: var(--color-error);
+  color: var(--text-white);
+  border-color: var(--color-error);
+}
+
+.btn-error:hover {
+  background-color: var(--color-error-hover);
+  border-color: var(--color-error-hover);
+}

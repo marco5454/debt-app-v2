@@ -135,7 +135,7 @@ function DebtList({ debts, onDeleteDebt, payments = [], onOpenPayment }) {
                         <strong>{debt.name}</strong>
                       </td>
                       <td className="amount-col">
-                        <strong style={{ color: '#e74c3c', fontSize: '1rem' }}>
+                        <strong style={{ color: 'var(--color-error)', fontSize: '1rem' }}>
                           {formatCurrency(debt.totalAmount)}
                         </strong>
                       </td>
@@ -180,7 +180,7 @@ function DebtList({ debts, onDeleteDebt, payments = [], onOpenPayment }) {
                               </div>
                               <div className="expanded-item">
                                 <span className="expanded-label">Remaining Balance</span>
-                                <span className="expanded-value" style={{ color: '#c0392b' }}>
+                                <span className="expanded-value" style={{ color: 'var(--color-error)' }}>
                                   {formatCurrency(Math.max(debt.remainingAmount || debt.totalAmount, 0))}
                                 </span>
                               </div>
@@ -217,7 +217,7 @@ function DebtList({ debts, onDeleteDebt, payments = [], onOpenPayment }) {
                               {typeof debt.totalPaid === 'number' && (
                                 <div className="expanded-item">
                                   <span className="expanded-label">Total Paid</span>
-                                  <span className="expanded-value" style={{ color: '#27ae60' }}>
+                                  <span className="expanded-value" style={{ color: 'var(--color-success)' }}>
                                     {formatCurrency(debt.totalPaid)}
                                   </span>
                                 </div>

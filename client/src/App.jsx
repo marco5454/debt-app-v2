@@ -10,6 +10,7 @@ import Payments from './components/Payments'
 import AllDebtsList from './components/AllDebtsList'
 import PaidDebts from './components/PaidDebts'
 import FAQ from './components/FAQ'
+import PrivacyPolicy from './components/PrivacyPolicy'
 import './App.css'
 
 function ProtectedRoute({ isAuthenticated, children }) {
@@ -262,6 +263,9 @@ function AppContent({
             <div className="container">
               <FAQ />
             </div>
+          } />
+          <Route path="/privacy-policy" element={
+            <PrivacyPolicy />
           } />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>

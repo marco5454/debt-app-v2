@@ -221,35 +221,35 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
                       
                       if (isPaid) {
                         return (
-                          <div className="status-badge paid">
+                          <div className="status-badge status-paid">
                             <span className="status-icon">✅</span>
                             <span className="status-text">Paid Off</span>
                           </div>
                         )
                       } else if (progress >= 0.8) {
                         return (
-                          <div className="status-badge almost-paid">
+                          <div className="status-badge status-active">
                             <span className="status-icon">🎯</span>
                             <span className="status-text">Almost Done</span>
                           </div>
                         )
                       } else if (progress >= 0.5) {
                         return (
-                          <div className="status-badge in-progress">
+                          <div className="status-badge status-active">
                             <span className="status-icon">📈</span>
                             <span className="status-text">In Progress</span>
                           </div>
                         )
                       } else if (progress > 0) {
                         return (
-                          <div className="status-badge started">
+                          <div className="status-badge status-pending">
                             <span className="status-icon">🚀</span>
                             <span className="status-text">Started</span>
                           </div>
                         )
                       } else {
                         return (
-                          <div className="status-badge not-started">
+                          <div className="status-badge status-overdue">
                             <span className="status-icon">⏳</span>
                             <span className="status-text">Not Started</span>
                           </div>

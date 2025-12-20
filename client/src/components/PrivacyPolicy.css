@@ -1,0 +1,144 @@
+/* Privacy Policy Styles */
+.privacy-policy {
+  min-height: 100vh;
+  background-color: var(--bg-secondary);
+  padding: 20px;
+}
+
+.privacy-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: var(--bg-primary);
+  padding: 40px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  line-height: 1.6;
+}
+
+.back-button {
+  background-color: var(--color-primary);
+  color: var(--text-white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.privacy-policy h1 {
+  color: var(--text-primary);
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.last-updated {
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 40px;
+  font-size: 0.9rem;
+}
+
+.privacy-section {
+  margin-bottom: 35px;
+}
+
+.privacy-section h2 {
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.privacy-section h3 {
+  color: var(--color-neutral-800);
+  font-size: 1.1rem;
+  margin: 20px 0 10px 0;
+}
+
+.privacy-section p {
+  color: var(--text-secondary);
+  margin-bottom: 15px;
+  text-align: justify;
+}
+
+.privacy-section ul {
+  margin: 15px 0;
+  padding-left: 25px;
+}
+
+.privacy-section li {
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.contact-details {
+  background-color: var(--bg-secondary);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  margin-top: 15px;
+  border: 1px solid var(--border-light);
+}
+
+.contact-details p {
+  margin: 10px 0;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .privacy-policy {
+    padding: 10px;
+  }
+  
+  .privacy-container {
+    padding: 25px 20px;
+  }
+  
+  .privacy-policy h1 {
+    font-size: 2rem;
+  }
+  
+  .privacy-section h2 {
+    font-size: 1.2rem;
+  }
+  
+  .privacy-section p {
+    text-align: left;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .privacy-policy {
+    padding: 10px;
+  }
+  
+  .privacy-container {
+    padding: 25px 20px;
+  }
+  
+  .privacy-policy h1 {
+    font-size: 2rem;
+  }
+  
+  .privacy-section h2 {
+    font-size: 1.2rem;
+  }
+  
+  .privacy-section p {
+    text-align: left;
+  }
+}

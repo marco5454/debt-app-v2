@@ -156,7 +156,7 @@ function DebtForm({ onAddDebt, onUpdateDebt, debtToEdit, onClose }) {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">
-            Debt Name <span style={{ color: 'red' }}>*</span>
+            Debt Name <span style={{ color: 'var(--color-error)' }}>*</span>
           </label>
           <input
             type="text"
@@ -171,7 +171,7 @@ function DebtForm({ onAddDebt, onUpdateDebt, debtToEdit, onClose }) {
 
         <div className="form-group">
           <label htmlFor="totalAmount">
-            Total Amount (₱) <span style={{ color: 'red' }}>*</span>
+            Total Amount (₱) <span style={{ color: 'var(--color-error)' }}>*</span>
           </label>
           <input
             type="number"
@@ -222,7 +222,7 @@ function DebtForm({ onAddDebt, onUpdateDebt, debtToEdit, onClose }) {
 
         <div className="form-group">
           <label htmlFor="dateOfLoan">
-            Date of Loan <span style={{ color: 'red' }}>*</span>
+            Date of Loan <span style={{ color: 'var(--color-error)' }}>*</span>
           </label>
           <input
             type="date"

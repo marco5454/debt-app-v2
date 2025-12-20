@@ -106,7 +106,7 @@ export default function PaymentForm({ debt, onAddPayment, onClose }) {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="amount">
-            Payment Amount (₱) <span style={{ color: 'red' }}>*</span>
+            Payment Amount (₱) <span style={{ color: 'var(--color-error)' }}>*</span>
           </label>
           <input
             type="number"

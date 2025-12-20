@@ -1,4 +1,5 @@
 import './Footer.css'
+import { Link } from 'react-router-dom'
 
 function Footer() {
   return (
@@ -6,6 +7,9 @@ function Footer() {
       <div className="footer-content">
         <div className="footer-left">
           <p>&copy; 2025 Debt Tracker. All rights reserved.</p>
+          <div className="footer-links">
+            <Link to="/privacy-policy" className="footer-link">Privacy Policy</Link>
+          </div>
         </div>
         <div className="footer-center">
           <p>Created by Marco A. Melgar</p>
