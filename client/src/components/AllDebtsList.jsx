@@ -3,6 +3,7 @@ import { useState } from 'react'
 export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
   const [sortBy, setSortBy] = useState('dueDate')
   const [sortOrder, setSortOrder] = useState('asc')
+  const [searchTerm, setSearchTerm] = useState('')
 
   if (!debts || debts.length === 0) {
     return (
@@ -15,8 +16,19 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
     )
   }
 
-  // Sort debts
-  let sortedDebts = [...debts]
+  // Filter debts based on search term
+  const filteredDebts = debts.filter(debt => {
+    if (!searchTerm) return true
+    const searchLower = searchTerm.toLowerCase()
+    return (
+      debt.name.toLowerCase().includes(searchLower) ||
+      (debt.creditor && debt.creditor.toLowerCase().includes(searchLower)) ||
+      (debt.description && debt.description.toLowerCase().includes(searchLower))
+    )
+  })
+
+  // Sort filtered debts
+  let sortedDebts = [...filteredDebts]
   sortedDebts.sort((a, b) => {
     let aValue, bValue
     
@@ -109,9 +121,39 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
     <div className="all-debts-container">
       <div className="debts-header">
         <h2>All Debts Overview</h2>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search debts..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="search-clear"
+              aria-label="Clear search"
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
 
-      <div className="debts-table-wrapper">
+      {filteredDebts.length === 0 && searchTerm ? (
+        <div className="search-empty-state">
+          <h3>No debts found</h3>
+          <p>No debts match your search for "{searchTerm}"</p>
+          <button
+            onClick={() => setSearchTerm('')}
+            className="btn btn-secondary"
+          >
+            Clear search
+          </button>
+        </div>
+      ) : (
+        <div className="debts-table-wrapper">
         <table className="debts-table">
           <thead>
             <tr>
@@ -237,6 +279,7 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
           </tbody>
         </table>
       </div>
+      )}
     </div>
   )
 }
