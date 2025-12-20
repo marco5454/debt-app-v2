@@ -4,7 +4,7 @@ const reportSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['bug', 'feature', 'improvement', 'issue', 'feedback']
+    enum: ['bug', 'feature', 'improvement', 'issue', 'feedback', 'suggestion']
   },
   title: {
     type: String,

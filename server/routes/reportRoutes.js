@@ -10,25 +10,29 @@ router.post('/', async (req, res) => {
       type,
       title,
       description,
+      message,
       priority,
       category,
       suggestions,
       email
     } = req.body
 
-    // Validate required fields
-    if (!type || !title || !description) {
+    // Validate required fields - support both old and new structure
+    const hasOldFormat = title && description
+    const hasNewFormat = message
+    
+    if (!type || (!hasOldFormat && !hasNewFormat)) {
       return res.status(400).json({
         success: false,
-        message: 'Type, title, and description are required'
+        message: 'Please provide your feedback message'
       })
     }
 
-    // Create report data
+    // Create report data - handle both old and new structures
     const reportData = {
       type,
-      title,
-      description,
+      title: title || (message ? `${type.charAt(0).toUpperCase() + type.slice(1)} Feedback` : ''),
+      description: description || message || '',
       priority: priority || 'medium',
       category: category || 'general',
       suggestions: suggestions || '',

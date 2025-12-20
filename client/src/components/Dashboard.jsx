@@ -18,13 +18,9 @@ export default function Dashboard({ debts }) {
   
   const [showReportModal, setShowReportModal] = useState(false)
   const [reportData, setReportData] = useState({
-    type: 'bug',
-    title: '',
-    description: '',
-    priority: 'medium',
-    category: 'general',
-    email: '',
-    suggestions: ''
+    type: 'issue',
+    message: '',
+    email: ''
   })
   const [isSubmittingReport, setIsSubmittingReport] = useState(false)
 
@@ -124,6 +120,8 @@ export default function Dashboard({ debts }) {
     setIsSubmittingReport(true)
     
     try {
+      console.log('Submitting report data:', reportData)
+      
       const response = await fetch('/api/reports', {
         method: 'POST',
         headers: {
@@ -135,25 +133,28 @@ export default function Dashboard({ debts }) {
         body: JSON.stringify(reportData)
       })
 
+      console.log('Response status:', response.status)
+      console.log('Response headers:', response.headers)
+
       const result = await response.json()
+      console.log('Response data:', result)
 
       if (!response.ok) {
-        throw new Error(result.message || 'Failed to submit report')
+        throw new Error(result.message || `HTTP Error: ${response.status}`)
       }
 
-      alert('Thank you for your report! We\'ll review it and get back to you.')
+      alert('Thank you for reaching out! We appreciate your feedback and will review it.')
       setShowReportModal(false)
       setReportData({
-        type: 'bug',
-        title: '',
-        description: '',
-        priority: 'medium',
-        category: 'general',
-        email: '',
-        suggestions: ''
+        type: 'issue',
+        message: '',
+        email: ''
       })
     } catch (error) {
-      console.error('Error submitting report:', error)
+      console.error('Detailed error submitting report:', error)
+      console.error('Error name:', error.name)
+      console.error('Error message:', error.message)
+      console.error('Error stack:', error.stack)
       alert(`Failed to submit report: ${error.message}`)
     } finally {
       setIsSubmittingReport(false)
@@ -179,10 +180,10 @@ export default function Dashboard({ debts }) {
         <button 
           className="btn-report"
           onClick={() => setShowReportModal(true)}
-          title="Report issues or send suggestions"
+          title="Share feedback or report issues"
         >
-          <span className="report-icon">📋</span>
-          Report Issue
+          <span className="report-icon">💬</span>
+          Feedback
         </button>
       </div>
 
@@ -485,7 +486,7 @@ export default function Dashboard({ debts }) {
           <div className="modal-content report-modal" onClick={(e) => e.stopPropagation()}>
             <div className="report-form">
               <div className="report-form-header">
-                <h2>Send Report</h2>
+                <h2>Share Feedback</h2>
                 <button 
                   className="btn-close" 
                   onClick={() => setShowReportModal(false)}
@@ -496,97 +497,44 @@ export default function Dashboard({ debts }) {
               </div>
 
               <form onSubmit={handleReportSubmit}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="type">Report Type *</label>
-                    <select
-                      id="type"
-                      name="type"
-                      value={reportData.type}
-                      onChange={handleReportChange}
-                      required
-                    >
-                      <option value="bug">Bug Report</option>
-                      <option value="feature">Feature Request</option>
-                      <option value="improvement">Improvement Suggestion</option>
-                      <option value="issue">General Issue</option>
-                      <option value="feedback">Feedback</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="priority">Priority</label>
-                    <select
-                      id="priority"
-                      name="priority"
-                      value={reportData.priority}
-                      onChange={handleReportChange}
-                    >
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
-                      <option value="critical">Critical</option>
-                    </select>
-                  </div>
-                </div>
-
                 <div className="form-group">
-                  <label htmlFor="category">Category</label>
+                  <label htmlFor="type">What would you like to share? *</label>
                   <select
-                    id="category"
-                    name="category"
-                    value={reportData.category}
+                    id="type"
+                    name="type"
+                    value={reportData.type}
                     onChange={handleReportChange}
+                    required
                   >
-                    <option value="general">General</option>
-                    <option value="dashboard">Dashboard</option>
-                    <option value="payments">Payments</option>
-                    <option value="debts">Debt Management</option>
-                    <option value="ui">User Interface</option>
-                    <option value="performance">Performance</option>
-                    <option value="security">Security</option>
+                    <option value="issue">Report an Issue</option>
+                    <option value="suggestion">Make a Suggestion</option>
+                    <option value="feedback">General Feedback</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="title">Title *</label>
-                  <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    value={reportData.title}
+                  <label htmlFor="message">
+                    {reportData.type === 'issue' ? 'Describe the issue *' : 
+                     reportData.type === 'suggestion' ? 'Share your suggestion *' : 
+                     'Your feedback *'}
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={reportData.message}
                     onChange={handleReportChange}
-                    placeholder="Brief description of the issue or suggestion"
+                    placeholder={
+                      reportData.type === 'issue' ? 'Please describe what happened and how we can help...' : 
+                      reportData.type === 'suggestion' ? 'Tell us about your idea or feature request...' : 
+                      'We\'d love to hear your thoughts...'
+                    }
+                    rows="5"
                     required
                   />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="description">Description *</label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    value={reportData.description}
-                    onChange={handleReportChange}
-                    placeholder="Please provide detailed information about the issue, steps to reproduce, or your suggestion..."
-                    rows="4"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="suggestions">Suggestions or Solutions</label>
-                  <textarea
-                    id="suggestions"
-                    name="suggestions"
-                    value={reportData.suggestions}
-                    onChange={handleReportChange}
-                    placeholder="Any suggestions for improvement or potential solutions?"
-                    rows="3"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="email">Email <small>(optional)</small></label>
+                  <label htmlFor="email">Email <small>(optional - if you\'d like us to respond)</small></label>
                   <input
                     type="email"
                     id="email"
@@ -610,7 +558,7 @@ export default function Dashboard({ debts }) {
                     className="btn btn-primary"
                     disabled={isSubmittingReport}
                   >
-                    {isSubmittingReport ? 'Submitting...' : 'Send Report'}
+                    {isSubmittingReport ? 'Sending...' : 'Send Message'}
                   </button>
                 </div>
               </form>
