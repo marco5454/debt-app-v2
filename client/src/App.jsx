@@ -8,6 +8,7 @@ import Footer from './components/Footer'
 import PaymentForm from './components/PaymentForm'
 import Payments from './components/Payments'
 import AllDebtsList from './components/AllDebtsList'
+import PaidDebts from './components/PaidDebts'
 import FAQ from './components/FAQ'
 import './App.css'
 
@@ -98,6 +99,12 @@ function AppContent({
               Payments
             </Link>
             <Link 
+              to="/paid-debts" 
+              className={`nav-item ${location.pathname === '/paid-debts' ? 'active' : ''}`}
+            >
+              Paid Debts
+            </Link>
+            <Link 
               to="/faq" 
               className={`nav-item ${location.pathname === '/faq' ? 'active' : ''}`}
             >
@@ -137,6 +144,15 @@ function AppContent({
                 <div className="loading">Loading payments...</div>
               ) : (
                 <Payments debts={debts} onMakePayment={setPaymentDebt} />
+              )}
+            </div>
+          } />
+          <Route path="/paid-debts" element={
+            <div className="container">
+              {loading ? (
+                <div className="loading">Loading paid debts...</div>
+              ) : (
+                <PaidDebts debts={debts} />
               )}
             </div>
           } />

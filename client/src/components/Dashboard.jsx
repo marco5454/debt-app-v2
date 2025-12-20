@@ -305,7 +305,148 @@ export default function Dashboard({ debts }) {
           </div>
         </div>
       )}
-
+      {/* Debt Highlights Section */}
+      {debts && debts.length > 0 && (
+        <div className="debt-highlights-section">
+          <div className="highlights-header">
+            <h2>🎯 Debt Highlights</h2>
+            <p>Key insights about your debts that need attention</p>
+          </div>
+          
+          <div className="highlights-grid">
+            {(() => {
+              // Calculate highlights
+              const highlights = []
+              
+              // 1. Highest Interest Rate Debt
+              const highestInterestDebt = debts
+                .filter(debt => debt.interestRate > 0 && (debt.totalAmount - (debt.totalPaid || 0)) > 0)
+                .reduce((max, debt) => debt.interestRate > (max?.interestRate || 0) ? debt : max, null)
+              
+              if (highestInterestDebt) {
+                highlights.push({
+                  type: 'danger',
+                  icon: '🔥',
+                  title: 'Highest Interest Rate',
+                  subtitle: `${highestInterestDebt.interestRate}% APR`,
+                  description: `${highestInterestDebt.name} - ${formatCurrency(highestInterestDebt.totalAmount - (highestInterestDebt.totalPaid || 0))} remaining`,
+                  action: 'Consider paying this off first to save money!'
+                })
+              }
+              
+              // 2. Almost Paid Off (>80% paid)
+              const almostPaidOffDebt = debts
+                .filter(debt => {
+                  const progress = debt.totalAmount > 0 ? (debt.totalPaid || 0) / debt.totalAmount : 0
+                  return progress >= 0.8 && progress < 1 && (debt.totalAmount - (debt.totalPaid || 0)) > 0
+                })
+                .sort((a, b) => {
+                  const progressA = (a.totalPaid || 0) / a.totalAmount
+                  const progressB = (b.totalPaid || 0) / b.totalAmount
+                  return progressB - progressA
+                })[0]
+              
+              if (almostPaidOffDebt) {
+                const remaining = almostPaidOffDebt.totalAmount - (almostPaidOffDebt.totalPaid || 0)
+                const progress = ((almostPaidOffDebt.totalPaid || 0) / almostPaidOffDebt.totalAmount * 100).toFixed(1)
+                highlights.push({
+                  type: 'success',
+                  icon: '🎯',
+                  title: 'Almost There!',
+                  subtitle: `${progress}% complete`,
+                  description: `${almostPaidOffDebt.name} - Only ${formatCurrency(remaining)} left!`,
+                  action: 'A few more payments and you\'re done!'
+                })
+              }
+              
+              // 3. No Recent Payments (debts with payments but none in last 30 days)
+              const stalledDebt = debts
+                .filter(debt => {
+                  const hasPayments = (debt.totalPaid || 0) > 0
+                  const hasRecentPayment = debt.lastPaymentDate && 
+                    (new Date() - new Date(debt.lastPaymentDate)) / (1000 * 60 * 60 * 24) <= 30
+                  const stillOwes = (debt.totalAmount - (debt.totalPaid || 0)) > 0
+                  return hasPayments && !hasRecentPayment && stillOwes
+                })
+                .sort((a, b) => {
+                  const daysSinceA = a.lastPaymentDate ? 
+                    (new Date() - new Date(a.lastPaymentDate)) / (1000 * 60 * 60 * 24) : 999
+                  const daysSinceB = b.lastPaymentDate ? 
+                    (new Date() - new Date(b.lastPaymentDate)) / (1000 * 60 * 60 * 24) : 999
+                  return daysSinceB - daysSinceA
+                })[0]
+              
+              if (stalledDebt) {
+                const daysSince = stalledDebt.lastPaymentDate ? 
+                  Math.floor((new Date() - new Date(stalledDebt.lastPaymentDate)) / (1000 * 60 * 60 * 24)) : 0
+                highlights.push({
+                  type: 'warning',
+                  icon: '⏰',
+                  title: 'Payment Reminder',
+                  subtitle: `${daysSince} days since last payment`,
+                  description: `${stalledDebt.name} - ${formatCurrency(stalledDebt.totalAmount - (stalledDebt.totalPaid || 0))} remaining`,
+                  action: 'Consider making a payment to keep momentum!'
+                })
+              }
+              
+              // 4. Newest Debt (added in last 30 days)
+              const newestDebt = debts
+                .filter(debt => {
+                  const daysSinceAdded = (new Date() - new Date(debt.createdAt)) / (1000 * 60 * 60 * 24)
+                  return daysSinceAdded <= 30
+                })
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0]
+              
+              if (newestDebt && !highlights.some(h => h.title === 'Almost There!' && h.description.includes(newestDebt.name))) {
+                highlights.push({
+                  type: 'info',
+                  icon: '🆕',
+                  title: 'Recently Added',
+                  subtitle: 'New debt to track',
+                  description: `${newestDebt.name} - ${formatCurrency(newestDebt.totalAmount)}`,
+                  action: 'Start making payments to reduce this debt!'
+                })
+              }
+              
+              // 5. Zero Payment Debt (debts with no payments made yet)
+              const unpaidDebt = debts
+                .filter(debt => (debt.totalPaid || 0) === 0)
+                .sort((a, b) => b.totalAmount - a.totalAmount)[0]
+              
+              if (unpaidDebt && !highlights.some(h => h.description.includes(unpaidDebt.name))) {
+                highlights.push({
+                  type: 'warning',
+                  icon: '🎬',
+                  title: 'Start Here',
+                  subtitle: 'No payments yet',
+                  description: `${unpaidDebt.name} - ${formatCurrency(unpaidDebt.totalAmount)}`,
+                  action: 'Make your first payment to get started!'
+                })
+              }
+              
+              return highlights.slice(0, 4).map((highlight, index) => (
+                <div key={index} className={`highlight-card ${highlight.type}`}>
+                  <div className="highlight-icon">{highlight.icon}</div>
+                  <div className="highlight-content">
+                    <h4>{highlight.title}</h4>
+                    <div className="highlight-subtitle">{highlight.subtitle}</div>
+                    <div className="highlight-description">{highlight.description}</div>
+                    <div className="highlight-action">{highlight.action}</div>
+                  </div>
+                </div>
+              ))
+            })()}
+          </div>
+          
+          {debts.filter(debt => (debt.totalPaid || 0) >= debt.totalAmount).length > 0 && (
+            <div className="celebration-highlight">
+              <div className="celebration-content">
+                🎉 <strong>Congratulations!</strong> You've paid off {debts.filter(debt => (debt.totalPaid || 0) >= debt.totalAmount).length} debt{debts.filter(debt => (debt.totalPaid || 0) >= debt.totalAmount).length > 1 ? 's' : ''}! Keep up the great work!
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       {/* Bottom Row - Side by Side */}
       <div className="dashboard-bottom-row">
         {/* Highest Debt Alert */}

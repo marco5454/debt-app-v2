@@ -3801,3 +3801,529 @@ body {
     font-size: 0.9rem;
   }
 }
+
+/* Debt Highlights Section */
+.debt-highlights-section {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  margin: 25px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e3e6ea;
+}
+
+.highlights-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.highlights-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.highlights-header p {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 1rem;
+}
+
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.highlight-card {
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  border-left: 4px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.highlight-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.05;
+  background: currentColor;
+  z-index: 0;
+}
+
+.highlight-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.highlight-card.danger {
+  background: #fff5f5;
+  border-left-color: #e74c3c;
+  color: #c0392b;
+}
+
+.highlight-card.success {
+  background: #f0fff4;
+  border-left-color: #27ae60;
+  color: #1e8449;
+}
+
+.highlight-card.warning {
+  background: #fffbf0;
+  border-left-color: #f39c12;
+  color: #b7950b;
+}
+
+.highlight-card.info {
+  background: #f0f8ff;
+  border-left-color: #3498db;
+  color: #2874a6;
+}
+
+.highlight-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.highlight-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.highlight-content {
+  flex: 1;
+}
+
+.highlight-content h4 {
+  margin: 0 0 5px 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+.highlight-subtitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+
+.highlight-description {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  line-height: 1.4;
+}
+
+.highlight-action {
+  font-size: 0.85rem;
+  font-style: italic;
+  opacity: 0.7;
+  line-height: 1.3;
+}
+
+.celebration-highlight {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+  border: 1px solid #bee5eb;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.celebration-content {
+  font-size: 1.1rem;
+  color: #0c5460;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Responsive Design for Debt Highlights */
+@media (max-width: 768px) {
+  .debt-highlights-section {
+    padding: 20px 15px;
+    margin: 20px 0;
+  }
+  
+  .highlights-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .highlights-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .highlight-card {
+    padding: 15px;
+    gap: 12px;
+  }
+  
+  .highlight-icon {
+    font-size: 2rem;
+  }
+  
+  .highlight-content h4 {
+    font-size: 1.1rem;
+  }
+  
+  .celebration-highlight {
+    padding: 15px;
+  }
+  
+  .celebration-content {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .debt-highlights-section {
+    padding: 15px 10px;
+  }
+  
+  .highlights-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .highlights-header p {
+    font-size: 0.9rem;
+  }
+  
+  .highlight-card {
+    padding: 12px;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .highlight-icon {
+    font-size: 1.8rem;
+    align-self: center;
+  }
+  
+  .highlight-content h4 {
+    font-size: 1rem;
+  }
+  
+  .highlight-description {
+    font-size: 0.9rem;
+  }
+  
+  .highlight-action {
+    font-size: 0.8rem;
+  }
+}
+
+/* Status Badges */
+.debt-status {
+  text-align: center;
+  padding: 8px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.status-badge.paid {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+.status-badge.almost-paid {
+  background: linear-gradient(135deg, #fff3cd, #ffeeba);
+  color: #856404;
+  border-color: #ffeeba;
+}
+
+.status-badge.in-progress {
+  background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+  color: #0c5460;
+  border-color: #bee5eb;
+}
+
+.status-badge.started {
+  background: linear-gradient(135deg, #e2e3e5, #d6d8db);
+  color: #383d41;
+  border-color: #d6d8db;
+}
+
+.status-badge.not-started {
+  background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+.status-icon {
+  font-size: 0.9rem;
+}
+
+.status-text {
+  font-size: 0.8rem;
+}
+
+/* Paid Debts Component */
+.paid-debts-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.paid-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 30px;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(40, 167, 69, 0.3);
+}
+
+.paid-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.paid-header p {
+  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.paid-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.paid-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paid-stat .stat-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.paid-stat .stat-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.paid-table-wrapper {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.paid-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.paid-table th,
+.paid-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.paid-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.paid-table th:hover {
+  background: #e9ecef;
+}
+
+.paid-row {
+  transition: background-color 0.2s;
+}
+
+.paid-row:hover {
+  background: #f8f9fa;
+}
+
+.paid-debt-name {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.debt-title {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.debt-creditor {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.paid-amount {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.overpaid-amount {
+  color: #17a2b8;
+  font-weight: 600;
+}
+
+.completion-date,
+.time-to-pay {
+  color: #6c757d;
+}
+
+.congratulations-section {
+  margin-top: 30px;
+}
+
+.congrats-card {
+  background: linear-gradient(135deg, #fff8e1, #ffecb3);
+  border: 1px solid #ffcc02;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+}
+
+.congrats-card h3 {
+  margin: 0 0 15px 0;
+  font-size: 1.5rem;
+  color: #e65100;
+}
+
+.congrats-card p {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  color: #bf360c;
+  line-height: 1.6;
+}
+
+.congrats-card em {
+  font-size: 0.9rem;
+  color: #ff6f00;
+}
+
+/* Empty State for Paid Debts */
+.paid-debts-container .empty-state {
+  background: white;
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.paid-debts-container .empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.motivational-message {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-radius: 10px;
+  border: 1px solid #90caf9;
+}
+
+.motivational-message strong {
+  color: #1565c0;
+  font-size: 1.1rem;
+}
+
+.motivational-message p {
+  margin: 5px 0 0 0;
+  color: #1976d2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .paid-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .paid-table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .status-badge {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .status-text {
+    display: none;
+  }
+  
+  .paid-header {
+    padding: 20px;
+  }
+  
+  .paid-header h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .paid-debts-container {
+    padding: 15px;
+  }
+  
+  .paid-header {
+    padding: 15px;
+  }
+  
+  .paid-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .paid-stat .stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .congrats-card {
+    padding: 20px;
+  }
+  
+  .congrats-card h3 {
+    font-size: 1.3rem;
+  }
+}

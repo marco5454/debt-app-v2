@@ -133,6 +133,7 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
               <th>Interest Rate</th>
               <th>Monthly Payment</th>
               <th>Interest Accrued</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -183,6 +184,49 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
                   <td>{formatCurrency(debt.monthlyPayment)}</td>
                   <td className={`debt-amount ${interestAccrued > 0 ? 'interest-warning' : ''}`}>
                     {formatCurrency(interestAccrued)}
+                  </td>
+                  <td className="debt-status">
+                    {(() => {
+                      const isPaid = (debt.totalPaid || 0) >= debt.totalAmount
+                      const progress = debt.totalAmount > 0 ? (debt.totalPaid || 0) / debt.totalAmount : 0
+                      
+                      if (isPaid) {
+                        return (
+                          <div className="status-badge paid">
+                            <span className="status-icon">✅</span>
+                            <span className="status-text">Paid Off</span>
+                          </div>
+                        )
+                      } else if (progress >= 0.8) {
+                        return (
+                          <div className="status-badge almost-paid">
+                            <span className="status-icon">🎯</span>
+                            <span className="status-text">Almost Done</span>
+                          </div>
+                        )
+                      } else if (progress >= 0.5) {
+                        return (
+                          <div className="status-badge in-progress">
+                            <span className="status-icon">📈</span>
+                            <span className="status-text">In Progress</span>
+                          </div>
+                        )
+                      } else if (progress > 0) {
+                        return (
+                          <div className="status-badge started">
+                            <span className="status-icon">🚀</span>
+                            <span className="status-text">Started</span>
+                          </div>
+                        )
+                      } else {
+                        return (
+                          <div className="status-badge not-started">
+                            <span className="status-icon">⏳</span>
+                            <span className="status-text">Not Started</span>
+                          </div>
+                        )
+                      }
+                    })()}
                   </td>
                 </tr>
               )
