@@ -1,14 +1,17 @@
 import { useState } from 'react'
 
 export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
-  const [sortBy, setSortBy] = useState('dueDate')
-  const [sortOrder, setSortOrder] = useState('asc')
   const [searchTerm, setSearchTerm] = useState('')
 
   if (!debts || debts.length === 0) {
     return (
-      <div className="all-debts-container">
+      <div className="debts-page">
+        <div className="debts-page-header">
+          <h1>All Debts</h1>
+          <p>Track and manage all your debts in one place</p>
+        </div>
         <div className="empty-state">
+          <div className="empty-icon">💳</div>
           <h2>No Debts Yet</h2>
           <p>You haven't added any debts. Start by adding one to get started!</p>
         </div>
@@ -27,43 +30,19 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
     )
   })
 
-  // Sort filtered debts
-  let sortedDebts = [...filteredDebts]
-  sortedDebts.sort((a, b) => {
-    let aValue, bValue
+  // Sort debts by creation date (newest first) or by name
+  const sortedDebts = [...filteredDebts].sort((a, b) => {
+    // First sort by completion status (incomplete first)
+    const aCompleted = (a.totalPaid || 0) >= a.totalAmount
+    const bCompleted = (b.totalPaid || 0) >= b.totalAmount
     
-    if (sortBy === 'name') {
-      aValue = (a.name || '').toLowerCase()
-      bValue = (b.name || '').toLowerCase()
-    } else if (sortBy === 'amount') {
-      aValue = a.totalAmount
-      bValue = b.totalAmount
-    } else if (sortBy === 'remaining') {
-      aValue = (a.totalAmount - (a.totalPaid || 0))
-      bValue = (b.totalAmount - (b.totalPaid || 0))
-    } else if (sortBy === 'progress') {
-      aValue = ((a.totalPaid || 0) / a.totalAmount * 100)
-      bValue = ((b.totalPaid || 0) / b.totalAmount * 100)
-    } else if (sortBy === 'dueDate') {
-      aValue = a.dateOfLoan ? new Date(a.dateOfLoan) : new Date(0)
-      bValue = b.dateOfLoan ? new Date(b.dateOfLoan) : new Date(0)
+    if (aCompleted !== bCompleted) {
+      return aCompleted ? 1 : -1
     }
-
-    if (sortOrder === 'asc') {
-      return aValue > bValue ? 1 : -1
-    } else {
-      return aValue < bValue ? 1 : -1
-    }
+    
+    // Then sort by name
+    return (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase())
   })
-
-  const toggleSort = (field) => {
-    if (sortBy === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
-    } else {
-      setSortBy(field)
-      setSortOrder('asc')
-    }
-  }
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-PH', {
@@ -79,11 +58,6 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
       day: 'numeric',
       year: 'numeric'
     })
-  }
-
-  const getSortIndicator = (field) => {
-    if (sortBy !== field) return ' ↕'
-    return sortOrder === 'asc' ? ' ↑' : ' ↓'
   }
 
   const calculateInterestAccrued = (debt) => {
@@ -118,13 +92,17 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
   }
 
   return (
-    <div className="all-debts-container">
-      <div className="debts-header">
-        <h2>All Debts Overview</h2>
-        <div className="search-container">
+    <div className="debts-page">
+      <div className="debts-page-header">
+        <h1>All Debts</h1>
+        <p>Track and manage all your debts in one place</p>
+      </div>
+
+      <div className="search-section">
+        <div className="search-box">
           <input
             type="text"
-            placeholder="Search debts..."
+            placeholder="Search debts by name or creditor..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -132,7 +110,7 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
           {searchTerm && (
             <button
               onClick={() => setSearchTerm('')}
-              className="search-clear"
+              className="search-clear-btn"
               aria-label="Clear search"
             >
               ✕
@@ -142,7 +120,8 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
       </div>
 
       {filteredDebts.length === 0 && searchTerm ? (
-        <div className="search-empty-state">
+        <div className="no-results">
+          <div className="no-results-icon">🔍</div>
           <h3>No debts found</h3>
           <p>No debts match your search for "{searchTerm}"</p>
           <button
@@ -153,132 +132,126 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
           </button>
         </div>
       ) : (
-        <div className="debts-table-wrapper">
-        <table className="debts-table">
-          <thead>
-            <tr>
-              <th onClick={() => toggleSort('name')}>
-                Debt Name{getSortIndicator('name')}
-              </th>
-              <th onClick={() => toggleSort('amount')}>
-                Total Amount{getSortIndicator('amount')}
-              </th>
-              <th onClick={() => toggleSort('progress')}>
-                Progress{getSortIndicator('progress')}
-              </th>
-              <th onClick={() => toggleSort('remaining')}>
-                Remaining{getSortIndicator('remaining')}
-              </th>
-              <th onClick={() => toggleSort('dueDate')}>
-                Due Date{getSortIndicator('dueDate')}
-              </th>
-              <th>Interest Rate</th>
-              <th>Monthly Payment</th>
-              <th>Interest Accrued</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedDebts.map((debt) => {
-              const totalPaidAmount = debt.totalPaid || 0
-              const remainingAmount = debt.totalAmount - totalPaidAmount
-              const progressPercent = debt.totalAmount
-                ? ((totalPaidAmount / debt.totalAmount) * 100).toFixed(1)
-                : '0.0'
-              const interestAccrued = calculateInterestAccrued(debt)
+        <div className="debts-grid">
+          {sortedDebts.map((debt) => {
+            const totalPaidAmount = debt.totalPaid || 0
+            const remainingAmount = debt.totalAmount - totalPaidAmount
+            const progressPercent = debt.totalAmount
+              ? ((totalPaidAmount / debt.totalAmount) * 100)
+              : 0
+            const interestAccrued = calculateInterestAccrued(debt)
 
-              return (
-                <tr key={debt._id} className="debt-row">
-                  <td className="debt-name" data-label="Debt Name">
-                    <div className="debt-name-cell">
-                      <span>{debt.name}</span>
+            // Determine progress color class
+            let progressColorClass = 'error'
+            if (progressPercent >= 80) progressColorClass = 'success'
+            else if (progressPercent >= 50) progressColorClass = 'info'
+            else if (progressPercent >= 20) progressColorClass = 'warning'
+
+            // Determine status badge
+            const getStatusBadge = () => {
+              const isPaid = totalPaidAmount >= debt.totalAmount
+              const progress = progressPercent / 100
+              
+              if (isPaid) {
+                return { class: 'success', label: 'Paid Off' }
+              } else if (progress >= 0.8) {
+                return { class: 'info', label: 'Almost Done' }
+              } else if (progress >= 0.5) {
+                return { class: 'info', label: 'In Progress' }
+              } else if (progress > 0) {
+                return { class: 'warning', label: 'Started' }
+              } else {
+                return { class: 'error', label: 'Not Started' }
+              }
+            }
+
+            const statusBadge = getStatusBadge()
+
+            return (
+              <div key={debt._id} className="debt-card">
+                <div className="debt-card-header">
+                  <div className="debt-title">
+                    <h3>{debt.name}</h3>
+                    {debt.creditor && <p className="debt-creditor">{debt.creditor}</p>}
+                  </div>
+                  <div className={`debt-status-badge ${statusBadge.class}`}>
+                    {statusBadge.label}
+                  </div>
+                </div>
+
+                <div className="debt-amounts">
+                  <div className="amount-row">
+                    <span className="amount-label">Total Amount:</span>
+                    <span className="amount-value total">{formatCurrency(debt.totalAmount)}</span>
+                  </div>
+                  <div className="amount-row">
+                    <span className="amount-label">Remaining:</span>
+                    <span className="amount-value remaining">{formatCurrency(remainingAmount)}</span>
+                  </div>
+                  <div className="amount-row">
+                    <span className="amount-label">Paid:</span>
+                    <span className="amount-value paid">{formatCurrency(totalPaidAmount)}</span>
+                  </div>
+                </div>
+
+                <div className="debt-progress">
+                  <div className="progress-header">
+                    <span>Progress</span>
+                    <span className="progress-percentage">{progressPercent.toFixed(1)}%</span>
+                  </div>
+                  <div className="progress-bar-simple">
+                    <div 
+                      className={`progress-fill-simple ${progressColorClass}`}
+                      style={{ width: `${Math.min(progressPercent, 100)}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                <div className="debt-details">
+                  <div className="detail-item">
+                    <span className="detail-label">Date Started:</span>
+                    <span className="detail-value">{formatDate(debt.dateOfLoan)}</span>
+                  </div>
+                  {debt.interestRate && (
+                    <div className="detail-item">
+                      <span className="detail-label">Interest Rate:</span>
+                      <span className="detail-value">{debt.interestRate}%</span>
                     </div>
-                  </td>
-                  <td className="debt-amount" data-label="Total Amount">{formatCurrency(debt.totalAmount)}</td>
-                  <td data-label="Progress">
-                    <div className="progress-bar-container">
-                      <div className="progress-bar">
-                        <div 
-                          className="progress-fill"
-                          style={{ width: `${progressPercent}%` }}
-                        ></div>
-                      </div>
-                      <span className="progress-text">{progressPercent}%</span>
+                  )}
+                  {debt.monthlyPayment && (
+                    <div className="detail-item">
+                      <span className="detail-label">Monthly Payment:</span>
+                      <span className="detail-value">{formatCurrency(debt.monthlyPayment)}</span>
                     </div>
-                  </td>
-                  <td className="debt-amount" data-label="Remaining">{formatCurrency(remainingAmount)}</td>
-                  <td data-label="Date">{formatDate(debt.dateOfLoan)}</td>
-                  <td data-label="Interest Rate">{debt.interestRate ? `${debt.interestRate}%` : 'N/A'}</td>
-                  <td data-label="Monthly Payment">{formatCurrency(debt.monthlyPayment)}</td>
-                  <td className={`debt-amount ${interestAccrued > 0 ? 'interest-warning' : ''}`} data-label="Interest Accrued">
-                    {formatCurrency(interestAccrued)}
-                  </td>
-                  <td className="debt-status" data-label="Status">
-                    {(() => {
-                      const isPaid = (debt.totalPaid || 0) >= debt.totalAmount
-                      const progress = debt.totalAmount > 0 ? (debt.totalPaid || 0) / debt.totalAmount : 0
-                      
-                      if (isPaid) {
-                        return (
-                          <div className="status-badge status-paid">
-                            <span className="status-icon">✅</span>
-                            <span className="status-text">Paid Off</span>
-                          </div>
-                        )
-                      } else if (progress >= 0.8) {
-                        return (
-                          <div className="status-badge status-active">
-                            <span className="status-icon">🎯</span>
-                            <span className="status-text">Almost Done</span>
-                          </div>
-                        )
-                      } else if (progress >= 0.5) {
-                        return (
-                          <div className="status-badge status-active">
-                            <span className="status-icon">📈</span>
-                            <span className="status-text">In Progress</span>
-                          </div>
-                        )
-                      } else if (progress > 0) {
-                        return (
-                          <div className="status-badge status-pending">
-                            <span className="status-icon">🚀</span>
-                            <span className="status-text">Started</span>
-                          </div>
-                        )
-                      } else {
-                        return (
-                          <div className="status-badge status-overdue">
-                            <span className="status-icon">⏳</span>
-                            <span className="status-text">Not Started</span>
-                          </div>
-                        )
-                      }
-                    })()}
-                  </td>
-                  <td className="debt-actions-cell" data-label="Actions">
-                    <div className="debt-actions">
-                      <button
-                        className="btn btn-secondary btn-update"
-                        onClick={() => onEditDebt && onEditDebt(debt)}
-                      >
-                        Update
-                      </button>
-                      <button
-                        className="btn btn-danger btn-delete"
-                        onClick={() => handleDeleteClick(debt)}
-                      >
-                        Delete
-                      </button>
+                  )}
+                  {interestAccrued > 0 && (
+                    <div className="detail-item">
+                      <span className="detail-label">Interest Accrued:</span>
+                      <span className="detail-value" style={{ color: '#FF2C2C', fontWeight: '700' }}>
+                        {formatCurrency(interestAccrued)}
+                      </span>
                     </div>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+                  )}
+                </div>
+
+                <div className="debt-actions">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => onEditDebt && onEditDebt(debt)}
+                  >
+                    Update
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDeleteClick(debt)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
       )}
     </div>
   )
