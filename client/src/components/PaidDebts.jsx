@@ -126,68 +126,25 @@ export default function PaidDebts({ debts }) {
         </div>
       </div>
 
-      <div className="paid-table-wrapper">
-        <table className="paid-table">
-          <thead>
-            <tr>
-              <th onClick={() => toggleSort('name')}>
-                Debt Name{getSortIndicator('name')}
-              </th>
-              <th onClick={() => toggleSort('amount')}>
-                Original Amount{getSortIndicator('amount')}
-              </th>
-              <th onClick={() => toggleSort('totalPaid')}>
-                Total Paid{getSortIndicator('totalPaid')}
-              </th>
-              <th onClick={() => toggleSort('overpaid')}>
-                Overpayment{getSortIndicator('overpaid')}
-              </th>
-              <th onClick={() => toggleSort('paidDate')}>
-                Completion Date{getSortIndicator('paidDate')}
-              </th>
-              <th>Time to Pay Off</th>
-              <th>Interest Rate</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedPaidDebts.map((debt) => {
-              const totalPaidAmount = debt.totalPaid || 0
-              const overpaidAmount = Math.max(totalPaidAmount - debt.totalAmount, 0)
-              const completionDate = debt.lastPaymentDate || debt.updatedAt
-              const timeToPay = calculateTimeToPay(debt)
-
-              return (
-                <tr key={debt._id} className="paid-row">
-                  <td className="debt-name">
-                    <div className="paid-debt-name">
-                      <span className="debt-title">{debt.name}</span>
-                      {debt.creditor && (
-                        <span className="debt-creditor">by {debt.creditor}</span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="debt-amount">{formatCurrency(debt.totalAmount)}</td>
-                  <td className="debt-amount paid-amount">{formatCurrency(totalPaidAmount)}</td>
-                  <td className="debt-amount overpaid-amount">
-                    {overpaidAmount > 0 ? formatCurrency(overpaidAmount) : '—'}
-                  </td>
-                  <td className="completion-date">{formatDate(completionDate)}</td>
-                  <td className="time-to-pay">{timeToPay}</td>
-                  <td className="interest-rate">
-                    {debt.interestRate ? `${debt.interestRate}%` : '—'}
-                  </td>
-                  <td className="debt-status">
-                    <div className="status-badge paid">
-                      <span className="status-icon">✅</span>
-                      <span className="status-text">Paid Off</span>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+      {/* Simple Paid Debts List */}
+      <div className="simple-paid-list">
+        <h3>Paid Off Debts</h3>
+        <div className="paid-debt-list">
+          {sortedPaidDebts.map((debt) => {
+            const totalPaidAmount = debt.totalPaid || 0
+            const completionDate = debt.lastPaymentDate || debt.updatedAt
+            
+            return (
+              <div key={debt._id} className="paid-debt-item">
+                <div className="paid-debt-info">
+                  <div className="debt-name-paid">{debt.name}</div>
+                  <div className="completion-date-paid">{formatDate(completionDate)}</div>
+                </div>
+                <div className="debt-amount-paid">{formatCurrency(debt.totalAmount)}</div>
+              </div>
+            )
+          })}
+        </div>
       </div>
 
       <div className="congratulations-section">

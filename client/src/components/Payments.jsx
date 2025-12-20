@@ -132,78 +132,7 @@ export default function Payments({ debts, onMakePayment }) {
 
       {/* Main Content - Side by Side */}
       <div className="payments-main-content">
-        {/* Payment History Section */}
-        <div className="payment-history-section">
-        <div className="payment-history-header">
-          <h3>Payment History</h3>
-          <div className="payment-filters">
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="filter-select"
-            >
-              <option value="all">All Debts</option>
-              {debts.map(debt => (
-                <option key={debt._id} value={debt._id}>{debt.name}</option>
-              ))}
-            </select>
-            
-            <select
-              value={`${sortBy}-${sortOrder}`}
-              onChange={(e) => {
-                const [field, order] = e.target.value.split('-')
-                setSortBy(field)
-                setSortOrder(order)
-              }}
-              className="sort-select"
-            >
-              <option value="date-desc">Latest First</option>
-              <option value="date-asc">Oldest First</option>
-              <option value="amount-desc">Highest Amount</option>
-              <option value="amount-asc">Lowest Amount</option>
-              <option value="debt-asc">Debt Name A-Z</option>
-              <option value="debt-desc">Debt Name Z-A</option>
-            </select>
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="loading">Loading payment history...</div>
-        ) : sortedPayments.length === 0 ? (
-          <div className="empty-payments">
-            <div className="empty-icon">💳</div>
-            <h4>No Payments Yet</h4>
-            <p>Start making payments to see your payment history here.</p>
-          </div>
-        ) : (
-          <div className="payments-table-wrapper">
-            <table className="payments-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Debt</th>
-                  <th>Amount</th>
-                  <th>Method</th>
-                  <th>Note</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedPayments.map((payment) => (
-                  <tr key={payment._id}>
-                    <td>{formatDate(payment.date)}</td>
-                    <td className="debt-name">{getDebtName(payment.debtId)}</td>
-                    <td className="payment-amount">{formatCurrency(payment.amount)}</td>
-                    <td className="payment-method">{payment.method || 'Cash'}</td>
-                    <td className="payment-note">{payment.note || '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-        </div>
-
-        {/* Quick Pay Section - Right Side */}
+        {/* Quick Pay Section */}
         {activeDebts.length > 0 && (
           <div className="quick-pay-section">
             <h3>Quick Pay</h3>
@@ -245,6 +174,30 @@ export default function Payments({ debts, onMakePayment }) {
             </div>
           </div>
         )}
+
+        {/* Simple Payment History */}
+        <div className="simple-payment-history">
+          <h3>Recent Payments</h3>
+          {loading ? (
+            <div className="loading">Loading payments...</div>
+          ) : sortedPayments.length === 0 ? (
+            <div className="empty-state">
+              <p>No payments made yet</p>
+            </div>
+          ) : (
+            <div className="payment-list">
+              {sortedPayments.slice(0, 10).map((payment) => (
+                <div key={payment._id} className="payment-item-simple">
+                  <div className="payment-info">
+                    <div className="payment-debt">{getDebtName(payment.debtId)}</div>
+                    <div className="payment-date">{formatDate(payment.date)}</div>
+                  </div>
+                  <div className="payment-amount-simple">+{formatCurrency(payment.amount)}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
