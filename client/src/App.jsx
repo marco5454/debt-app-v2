@@ -725,11 +725,23 @@ function App() {
     return (
       <div className="initial-loading-container">
         <div className="loading-animation">
+          <div className="loading-brand">
+            <div className="loading-icon">💰</div>
+            <h1 className="loading-title">Debt Tracker</h1>
+          </div>
           <div className="spinner"></div>
           <div className="loading-text">
-            <h2>Debt Tracker</h2>
-            <p>Loading your financial dashboard...</p>
+            <h2>Welcome!</h2>
+            <p>
+              Loading your financial dashboard
+              <span className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </p>
           </div>
+          <div className="loading-progress"></div>
         </div>
       </div>
     )
@@ -740,11 +752,23 @@ function App() {
     return (
       <div className="initial-loading-container">
         <div className="loading-animation">
+          <div className="loading-brand">
+            <div className="loading-icon">💰</div>
+            <h1 className="loading-title">Debt Tracker</h1>
+          </div>
           <div className="spinner"></div>
           <div className="loading-text">
             <h2>Welcome Back!</h2>
-            <p>Setting up your dashboard...</p>
+            <p>
+              Setting up your dashboard
+              <span className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </p>
           </div>
+          <div className="loading-progress"></div>
         </div>
       </div>
     )
@@ -755,11 +779,23 @@ function App() {
     return (
       <div className="initial-loading-container">
         <div className="loading-animation">
+          <div className="loading-brand">
+            <div className="loading-icon">💰</div>
+            <h1 className="loading-title">Debt Tracker</h1>
+          </div>
           <div className="spinner"></div>
           <div className="loading-text">
             <h2>Welcome!</h2>
-            <p>Creating your account...</p>
+            <p>
+              Creating your account
+              <span className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </p>
           </div>
+          <div className="loading-progress"></div>
         </div>
       </div>
     )
@@ -770,11 +806,23 @@ function App() {
     return (
       <div className="initial-loading-container">
         <div className="loading-animation">
+          <div className="loading-brand">
+            <div className="loading-icon">💰</div>
+            <h1 className="loading-title">Debt Tracker</h1>
+          </div>
           <div className="spinner"></div>
           <div className="loading-text">
             <h2>Logging Out</h2>
-            <p>Securing your session...</p>
+            <p>
+              Securing your session
+              <span className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </p>
           </div>
+          <div className="loading-progress"></div>
         </div>
       </div>
     )

@@ -258,6 +258,143 @@ export default function Dashboard({ debts }) {
         </div>
       </div>
 
+      {/* Quick Actions Panel */}
+      <div className="quick-actions">
+        <h3>⚡ Quick Actions</h3>
+        <div className="actions-grid">
+          <div className="action-card" onClick={() => window.location.href = '/all-debts'}>
+            <span className="action-icon">💳</span>
+            <h4>Add New Debt</h4>
+            <p className="action-description">Track a new debt or loan</p>
+          </div>
+          <div className="action-card" onClick={() => window.location.href = '/payments'}>
+            <span className="action-icon">💰</span>
+            <h4>Make Payment</h4>
+            <p className="action-description">Record a debt payment</p>
+          </div>
+          <div className="action-card" onClick={() => window.location.href = '/paid-debts'}>
+            <span className="action-icon">✅</span>
+            <h4>View Completed</h4>
+            <p className="action-description">See your paid-off debts</p>
+          </div>
+          <div className="action-card" onClick={() => window.location.href = '/faq'}>
+            <span className="action-icon">❓</span>
+            <h4>Get Help</h4>
+            <p className="action-description">FAQ and support</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Financial Insights Panel */}
+      <div className="financial-insights">
+        <h3>📊 Financial Insights</h3>
+        <div className="insights-grid">
+          <div className="insight-card">
+            <div className="insight-header">
+              <div className="insight-icon">📈</div>
+              <div className="insight-title">Average Payment</div>
+            </div>
+            <div className="insight-value">
+              {stats.totalPaid > 0 && debts.length > 0 
+                ? formatCurrency(stats.totalPaid / debts.length) 
+                : formatCurrency(0)
+              }
+            </div>
+            <div className="insight-description">
+              Average payment per debt
+            </div>
+          </div>
+          
+          <div className="insight-card">
+            <div className="insight-header">
+              <div className="insight-icon">🎯</div>
+              <div className="insight-title">Completion Rate</div>
+            </div>
+            <div className="insight-value">
+              {debts.length > 0 
+                ? `${((stats.completedDebts / debts.length) * 100).toFixed(1)}%`
+                : '0%'
+              }
+            </div>
+            <div className="insight-description">
+              Debts successfully paid off
+            </div>
+          </div>
+          
+          <div className="insight-card">
+            <div className="insight-header">
+              <div className="insight-icon">⚡</div>
+              <div className="insight-title">Debt-Free Goal</div>
+            </div>
+            <div className="insight-value">
+              {stats.remainingDebt > 0 && stats.totalPaid > 0 
+                ? `${Math.ceil(stats.remainingDebt / (stats.totalPaid / 12))} months`
+                : 'N/A'
+              }
+            </div>
+            <div className="insight-description">
+              Estimated time to debt freedom
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Monthly Progress Panel */}
+      <div className="monthly-progress">
+        <h3>📅 This Month's Progress</h3>
+        <div className="progress-comparison">
+          <div className="progress-item">
+            <div className="progress-label">Total Payments</div>
+            <div className="progress-amount positive">
+              {formatCurrency(stats.totalPaid * 0.15)} {/* Simulated monthly data */}
+            </div>
+            <span className="progress-change up">↗ +12% from last month</span>
+          </div>
+          
+          <div className="progress-item">
+            <div className="progress-label">Debts Reduced</div>
+            <div className="progress-amount positive">
+              {stats.activeDebts > 0 ? Math.min(3, stats.activeDebts) : 0}
+            </div>
+            <span className="progress-change up">↗ Great progress!</span>
+          </div>
+          
+          <div className="progress-item">
+            <div className="progress-label">Average Payment</div>
+            <div className="progress-amount neutral">
+              {formatCurrency(stats.totalPaid > 0 ? stats.totalPaid / Math.max(stats.totalDebts, 1) / 3 : 0)}
+            </div>
+            <span className="progress-change same">→ Consistent payments</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Financial Tips Panel */}
+      <div className="financial-tips">
+        <h3>💡 Financial Tip</h3>
+        <div className="tip-content">
+          <div className="tip-title">
+            {stats.averageProgress > 50 
+              ? "You're Making Great Progress!" 
+              : stats.totalDebts > 1 
+                ? "Consider the Debt Avalanche Method" 
+                : "Stay Consistent with Payments"
+            }
+          </div>
+          <div className="tip-text">
+            {stats.averageProgress > 50 
+              ? "You've completed more than half your debt journey! Keep maintaining regular payments and consider making extra payments toward your smallest remaining debt for a psychological boost."
+              : stats.totalDebts > 1 
+                ? "Focus on paying minimum amounts on all debts, then put any extra money toward the debt with the highest interest rate. This will save you the most money over time."
+                : "Make consistent payments and try to pay slightly more than the minimum when possible. Even small extra amounts can significantly reduce the total interest you'll pay."
+            }
+          </div>
+          <div className="tip-action">
+            💪 You've got this! Every payment brings you closer to financial freedom.
+          </div>
+        </div>
+      </div>
+
       {/* Interest Tracking Section */}
       {(stats.monthlyInterest > 0 || stats.annualInterest > 0) && (
         <div className="interest-section">

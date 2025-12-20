@@ -96,21 +96,26 @@ function Login({ onLogin }) {
   }
 
   return (
-    <div className="login-card">
+    <div className="login-container">
+      <div className="login-card">
         <div className="login-header">
-          <h1>💰 Debt Tracker</h1>
-          <p>Sign in to manage your debts</p>
+          <div className="login-brand">
+            <div className="brand-icon">💰</div>
+            <h1 className="brand-title">Debt Tracker</h1>
+          </div>
+          <p className="login-subtitle">Sign in to manage your debts</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
           {error && (
             <div className="login-error">
-              {error}
+              <div className="error-icon">⚠️</div>
+              <span>{error}</span>
             </div>
           )}
 
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username" className="form-label">Username</label>
             <input
               type="text"
               id="username"
@@ -120,11 +125,12 @@ function Login({ onLogin }) {
               placeholder="Enter your username"
               required
               autoComplete="username"
+              className="form-input"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className="form-label">Password</label>
             <input
               type="password"
               id="password"
@@ -135,24 +141,32 @@ function Login({ onLogin }) {
               required
               autoComplete="current-password"
               minLength={6}
+              className="form-input"
             />
           </div>
 
           <button 
             type="submit" 
-            className="btn btn-primary btn-login"
+            className="btn-signin"
             disabled={isLoading}
           >
-            {isLoading ? 'Signing in...' : 'Sign In'}
+            {isLoading ? (
+              <>
+                <div className="loading-spinner"></div>
+                Signing in...
+              </>
+            ) : (
+              'Sign In'
+            )}
           </button>
         </form>
 
         <div className="login-footer">
-          <p>
+          <p className="signup-prompt">
             Don't have an account?{' '}
             <button 
               type="button" 
-              className="link-button"
+              className="link-register"
               onClick={() => navigate('/register')}
             >
               Register
@@ -160,6 +174,7 @@ function Login({ onLogin }) {
           </p>
         </div>
       </div>
+    </div>
   )
 }
 
