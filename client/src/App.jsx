@@ -35,7 +35,16 @@ function AppContent({
   notification,
 }) {
   const location = useLocation()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [location.pathname])
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
   return (
     <div className="App">
       <div className="main-content">
@@ -56,12 +65,21 @@ function AppContent({
         )}
         <header className="header">
           <div className="header-content">
-            <div>
-              <h1>💰 Debt Tracker</h1>
-              <p>Manage and track your debts</p>
+            <button 
+              className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
+              onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+            >
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+            </button>
+            <div className="header-info">
+              <h1 className="app-title">💰 Debt Tracker</h1>
+              <p className="tagline">Manage and track your debts</p>
               <p className="username">Logged in as: {localStorage.getItem('username')}</p>
             </div>
-            <div className="header-actions">
+            <div className="header-actions desktop-only">
               <button 
                 className="btn btn-primary btn-add-debt"
                 onClick={() => setIsModalOpen(true)}
@@ -77,6 +95,90 @@ function AppContent({
             </div>
           </div>
         </header>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="mobile-menu-overlay" onClick={() => setIsMobileMenuOpen(false)}>
+            <div className="mobile-menu" onClick={(e) => e.stopPropagation()}>
+              <div className="mobile-menu-header">
+                <h3>Menu</h3>
+                <button 
+                  className="mobile-menu-close"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Close menu"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="mobile-menu-actions">
+                <button 
+                  className="mobile-menu-btn btn-add-debt"
+                  onClick={() => {
+                    setIsModalOpen(true)
+                    setIsMobileMenuOpen(false)
+                  }}
+                >
+                  <span className="menu-icon">➕</span>
+                  Add Debt
+                </button>
+                <button 
+                  className="mobile-menu-btn btn-logout"
+                  onClick={() => {
+                    handleLogout()
+                    setIsMobileMenuOpen(false)
+                  }}
+                >
+                  <span className="menu-icon">🚪</span>
+                  Logout
+                </button>
+              </div>
+              
+              <nav className="mobile-menu-nav">
+                <Link 
+                  to="/dashboard" 
+                  className={`mobile-nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="menu-icon">📊</span>
+                  Dashboard
+                </Link>
+                <Link 
+                  to="/all-debts" 
+                  className={`mobile-nav-item ${location.pathname === '/all-debts' ? 'active' : ''}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="menu-icon">📋</span>
+                  All Debts
+                </Link>
+                <Link 
+                  to="/payments" 
+                  className={`mobile-nav-item ${location.pathname === '/payments' ? 'active' : ''}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="menu-icon">💳</span>
+                  Payments
+                </Link>
+                <Link 
+                  to="/paid-debts" 
+                  className={`mobile-nav-item ${location.pathname === '/paid-debts' ? 'active' : ''}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="menu-icon">✅</span>
+                  Paid Debts
+                </Link>
+                <Link 
+                  to="/faq" 
+                  className={`mobile-nav-item ${location.pathname === '/faq' ? 'active' : ''}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="menu-icon">❓</span>
+                  FAQ
+                </Link>
+              </nav>
+            </div>
+          </div>
+        )}
 
         <nav className="nav-bar">
           <div className="nav-content">

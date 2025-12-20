@@ -11,6 +11,35 @@ html, body {
   width: 100%;
 }
 
+/* Show actions column on desktop with different styling */
+@media (min-width: 769px) {
+  .debt-actions-cell {
+    display: table-cell;
+    width: 150px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px;
+  }
+  
+  .debt-actions-cell:before {
+    display: none;
+  }
+  
+  .debt-actions-cell .debt-actions {
+    display: flex !important;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .debt-actions-cell .debt-actions .btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: auto;
+    border-radius: 4px;
+  }
+}
+
 /* Improve touch targets on mobile */
 @media (max-width: 768px) {
   button, input, select, textarea, a {
@@ -51,10 +80,19 @@ html, body {
     display: block;
     background: white;
     border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    padding: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    min-height: 400px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .debts-table tr:hover,
+  .debt-table tr:hover,
+  table tr:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   }
   
   .debts-table td,
@@ -63,18 +101,20 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
+    padding: 14px 0;
     border: none;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f5f5f5;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    min-height: 48px;
+    font-size: 16px;
   }
   
   .debts-table td:last-child,
   .debt-table td:last-child,
   table td:last-child {
     border-bottom: none;
-    margin-top: 8px;
+    margin-top: 16px;
   }
   
   /* Add labels for mobile */
@@ -82,26 +122,167 @@ html, body {
   .debt-table td:before,
   table td:before {
     content: attr(data-label);
-    font-weight: 600;
-    color: #666;
-    flex-basis: 40%;
+    font-weight: 700;
+    color: #2c3e50;
+    flex-basis: 45%;
     text-align: left;
-    margin-right: 12px;
+    margin-right: 16px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
   
-  /* Mobile button improvements */
-  .debt-actions {
-    flex-direction: column;
-    gap: 8px;
+  /* Special styling for debt name cell */
+  .debt-name {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 20px 0 24px 0 !important;
+    border-bottom: 3px solid #3498db !important;
+    background: linear-gradient(135deg, #f8fbff, #e6f3ff) !important;
+    margin: -24px -24px 16px -24px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    border-radius: 16px 16px 0 0 !important;
+    min-height: 80px;
+  }
+  
+  .debt-name:before {
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #2c3e50;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .debt-name-cell {
     width: 100%;
-    margin-top: 8px;
+  }
+  
+  .debt-name-cell > span {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    line-height: 1.2;
+  }
+  
+  /* Mobile button improvements - positioned at very bottom */
+  .debt-actions-cell {
+    border-top: 2px solid #e0e0e0 !important;
+    margin-top: 20px !important;
+    padding-top: 20px !important;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff) !important;
+    border-radius: 0 0 16px 16px !important;
+    margin-left: -24px !important;
+    margin-right: -24px !important;
+    margin-bottom: -24px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    padding-bottom: 24px !important;
+  }
+  
+  .debt-actions-cell:before {
+    display: none !important;
+  }
+  
+  .debt-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    margin-top: 0;
+    justify-content: center;
   }
   
   .debt-actions .btn {
     width: 100%;
-    padding: 12px 16px;
+    padding: 16px 24px;
     font-size: 14px;
-    min-height: 44px;
+    font-weight: 700;
+    min-height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .debt-actions .btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .debt-actions .btn:hover:before {
+    left: 100%;
+  }
+  
+  .debt-actions .btn-update {
+    background: linear-gradient(135deg, #3498db, #2980b9, #1f4e79);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+  }
+  
+  .debt-actions .btn-update:hover {
+    background: linear-gradient(135deg, #2980b9, #21618c, #1a4d72);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+  }
+  
+  .debt-actions .btn-delete {
+    background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+  }
+  
+  .debt-actions .btn-delete:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226, #8e2a1f);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
+  }
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+  }
+  
+  .debt-actions .btn-update {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border: none;
+    color: white;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+  }
+  
+  .debt-actions .btn-update:hover {
+    background: linear-gradient(135deg, #2980b9, #21618c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+  }
+  
+  .debt-actions .btn-delete {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border: none;
+    color: white;
+    box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+  }
+  
+  .debt-actions .btn-delete:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
   }
 }
 
@@ -4584,5 +4765,316 @@ body {
   }
   80% {
     transform: translateY(-2px);
+  }
+}
+
+/* Mobile Hamburger Menu Styles */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 1000;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.mobile-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Hamburger animation when menu is open */
+.mobile-menu-toggle.active .hamburger-line:first-child {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-toggle.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.active .hamburger-line:last-child {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  display: none;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 320px;
+  max-width: 90vw;
+  background: white;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+  transform: translateX(0);
+  transition: transform 0.3s ease-out;
+  overflow-y: auto;
+  animation: slideInRight 0.3s ease-out;
+  z-index: 2001;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.mobile-menu-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.mobile-menu-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.mobile-menu-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-menu-actions {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-menu-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-btn.btn-add-debt {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+}
+
+.mobile-menu-btn.btn-add-debt:hover {
+  background: linear-gradient(135deg, #2980b9, #2471a3);
+  transform: translateY(-1px);
+}
+
+.mobile-menu-btn.btn-logout {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.mobile-menu-btn.btn-logout:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  transform: translateY(-1px);
+}
+
+.mobile-menu-nav {
+  padding: 20px 0;
+}
+
+.mobile-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.mobile-nav-item:hover {
+  background: #f8f9fa;
+  border-left-color: #3498db;
+}
+
+.mobile-nav-item.active {
+  background: linear-gradient(90deg, #e3f2fd 0%, #bbdefb 100%);
+  border-left-color: #2196f3;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.menu-icon {
+  font-size: 18px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Header adjustments for mobile menu */
+.header-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.header-info h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.header-info .tagline {
+  margin: 4px 0 0 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.header-info .username {
+  margin: 2px 0 0 0;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* Hide app title on mobile only */
+@media (max-width: 768px) {
+  .app-title {
+    display: none;
+  }
+  
+  .tagline {
+    display: none;
+  }
+  
+  .header-content {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 16px 20px !important;
+  }
+  
+  .mobile-menu-toggle {
+    flex-shrink: 0;
+  }
+  
+  .header-info {
+    flex-shrink: 0;
+    text-align: right;
+  }
+}
+
+/* Desktop header adjustments */
+@media (min-width: 769px) {
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-info {
+    text-align: left;
+    margin: 0;
+  }
+}
+
+/* Show/hide elements based on screen size */
+@media (max-width: 768px) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  .mobile-menu-overlay {
+    display: block;
+  }
+  
+  .nav-bar {
+    display: none;
+  }
+  
+  .desktop-only {
+    display: none !important;
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    position: relative;
+    width: 100%;
+    gap: 16px;
+  }
+  
+  .mobile-menu-toggle {
+    order: 1;
+    align-self: center;
+  }
+  
+  .header-info {
+    order: 2;
+    text-align: right;
+    margin: 0;
+    flex-shrink: 0;
+  }
+  
+  .header-info h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu-overlay,
+  .mobile-menu-toggle {
+    display: none;
   }
 }

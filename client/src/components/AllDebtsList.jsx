@@ -134,6 +134,7 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
               <th>Monthly Payment</th>
               <th>Interest Accrued</th>
               <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -150,20 +151,6 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
                   <td className="debt-name" data-label="Debt Name">
                     <div className="debt-name-cell">
                       <span>{debt.name}</span>
-                      <div className="debt-actions">
-                        <button
-                          className="btn btn-secondary btn-update"
-                          onClick={() => onEditDebt && onEditDebt(debt)}
-                        >
-                          Update
-                        </button>
-                        <button
-                          className="btn btn-danger btn-delete"
-                          onClick={() => handleDeleteClick(debt)}
-                        >
-                          Delete
-                        </button>
-                      </div>
                     </div>
                   </td>
                   <td className="debt-amount" data-label="Total Amount">{formatCurrency(debt.totalAmount)}</td>
@@ -227,6 +214,22 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
                         )
                       }
                     })()}
+                  </td>
+                  <td className="debt-actions-cell" data-label="Actions">
+                    <div className="debt-actions">
+                      <button
+                        className="btn btn-secondary btn-update"
+                        onClick={() => onEditDebt && onEditDebt(debt)}
+                      >
+                        Update
+                      </button>
+                      <button
+                        className="btn btn-danger btn-delete"
+                        onClick={() => handleDeleteClick(debt)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               )
