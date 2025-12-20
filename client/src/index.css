@@ -385,8 +385,6 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 768px) {
@@ -3608,5 +3606,198 @@ body {
 
   .debts-header h2 {
     font-size: 1.3rem;
+  }
+}
+
+/* Interest Section Styles */
+.interest-section {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  margin: 25px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e3e6ea;
+}
+
+.interest-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.interest-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.interest-header p {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 1rem;
+}
+
+.interest-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.interest-card {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  border-left: 4px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.interest-card.monthly {
+  border-left-color: #3498db;
+}
+
+.interest-card.annual {
+  border-left-color: #e74c3c;
+}
+
+.interest-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.interest-icon {
+  font-size: 2.5rem;
+  margin-right: 15px;
+  opacity: 0.8;
+}
+
+.interest-content h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.interest-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #e74c3c;
+  margin-bottom: 5px;
+}
+
+.interest-description {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  line-height: 1.4;
+}
+
+.interest-insight {
+  margin-top: 20px;
+}
+
+.insight-box {
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  position: relative;
+}
+
+.insight-box h4 {
+  margin: 0 0 12px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.insight-content p {
+  margin: 0 0 10px 0;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.insight-content p:last-child {
+  margin-bottom: 0;
+}
+
+.insight-content strong {
+  font-weight: 700;
+  color: #ffeaa7;
+}
+
+.compound-warning {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  border-left: 3px solid #fdcb6e;
+}
+
+/* Responsive Design for Interest Section */
+@media (max-width: 768px) {
+  .interest-section {
+    padding: 20px 15px;
+    margin: 20px 0;
+  }
+  
+  .interest-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .interest-stats {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .interest-card {
+    padding: 15px;
+  }
+  
+  .interest-icon {
+    font-size: 2rem;
+    margin-right: 12px;
+  }
+  
+  .interest-value {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .interest-section {
+    padding: 15px 10px;
+  }
+  
+  .interest-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .interest-header p {
+    font-size: 0.9rem;
+  }
+  
+  .interest-card {
+    padding: 12px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .interest-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  
+  .insight-box {
+    padding: 15px;
+  }
+  
+  .insight-box h4 {
+    font-size: 1.1rem;
+  }
+  
+  .insight-content p {
+    font-size: 0.9rem;
   }
 }

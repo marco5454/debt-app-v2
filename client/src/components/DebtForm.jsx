@@ -188,7 +188,7 @@ function DebtForm({ onAddDebt, onUpdateDebt, debtToEdit, onClose }) {
 
         <div className="form-group">
           <label htmlFor="interestRate">
-            Interest Rate (%) <small>(optional)</small>
+            Interest Rate (%) <small>(optional - enables interest tracking)</small>
           </label>
           <input
             type="number"
@@ -196,11 +196,12 @@ function DebtForm({ onAddDebt, onUpdateDebt, debtToEdit, onClose }) {
             name="interestRate"
             value={formData.interestRate}
             onChange={handleChange}
-            placeholder="0.00"
+            placeholder="e.g., 18.5 for 18.5% annual rate"
             step="0.01"
             min="0"
+            max="100"
           />
-          <small>Annual interest rate percentage</small>
+          <small>💡 Enter the annual interest rate to track monthly and yearly interest costs</small>
         </div>
 
         <div className="form-group">

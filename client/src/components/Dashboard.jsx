@@ -11,7 +11,9 @@ export default function Dashboard({ debts }) {
     averageProgress: 0,
     highestDebt: null,
     overdueDebts: 0,
-    totalInterestAccrued: 0
+    totalInterestAccrued: 0,
+    monthlyInterest: 0,
+    annualInterest: 0
   })
   
   const [showReportModal, setShowReportModal] = useState(false)
@@ -38,7 +40,9 @@ export default function Dashboard({ debts }) {
         averageProgress: 0,
         highestDebt: null,
         overdueDebts: 0,
-        totalInterestAccrued: 0
+        totalInterestAccrued: 0,
+        monthlyInterest: 0,
+        annualInterest: 0
       })
       return
     }
@@ -52,24 +56,41 @@ export default function Dashboard({ debts }) {
     const highestDebt = debts.reduce((max, debt) => 
       debt.totalAmount > (max?.totalAmount || 0) ? debt : max, null)
     
-    // Calculate overdue debts and interest accrued
+    // Calculate comprehensive interest data
     let overdueCount = 0
     let totalInterestAccrued = 0
+    let totalMonthlyInterest = 0
+    let totalAnnualInterest = 0
 
     debts.forEach(debt => {
-      if (debt.monthlyPayment > 0 && debt.interestRate > 0) {
-        const loanDate = new Date(debt.dateOfLoan)
-        const currentDate = new Date()
-        const monthsElapsed = Math.floor((currentDate - loanDate) / (1000 * 60 * 60 * 24 * 30.44))
-        const expectedPayments = monthsElapsed * debt.monthlyPayment
-        const actualPaid = debt.totalPaid || 0
+      const interestRate = debt.interestRate || 0
+      const remainingBalance = Math.max(debt.totalAmount - (debt.totalPaid || 0), 0)
+      
+      if (interestRate > 0 && remainingBalance > 0) {
+        // Calculate monthly and annual interest on remaining balance
+        const monthlyRate = interestRate / 100 / 12
+        const annualRate = interestRate / 100
         
-        if (expectedPayments > actualPaid) {
-          overdueCount++
-          const overdueAmount = expectedPayments - actualPaid
-          const monthlyInterestRate = debt.interestRate / 100 / 12
-          const interestAccrued = Math.max(overdueAmount * monthlyInterestRate * monthsElapsed, 0)
-          totalInterestAccrued += interestAccrued
+        const monthlyInterest = remainingBalance * monthlyRate
+        const annualInterest = remainingBalance * annualRate
+        
+        totalMonthlyInterest += monthlyInterest
+        totalAnnualInterest += annualInterest
+        
+        // Calculate overdue interest
+        if (debt.monthlyPayment > 0) {
+          const loanDate = new Date(debt.dateOfLoan)
+          const currentDate = new Date()
+          const monthsElapsed = Math.floor((currentDate - loanDate) / (1000 * 60 * 60 * 24 * 30.44))
+          const expectedPayments = monthsElapsed * debt.monthlyPayment
+          const actualPaid = debt.totalPaid || 0
+          
+          if (expectedPayments > actualPaid) {
+            overdueCount++
+            const overdueAmount = expectedPayments - actualPaid
+            const interestAccrued = Math.max(overdueAmount * monthlyRate * monthsElapsed, 0)
+            totalInterestAccrued += interestAccrued
+          }
         }
       }
     })
@@ -84,7 +105,9 @@ export default function Dashboard({ debts }) {
       averageProgress,
       highestDebt,
       overdueDebts: overdueCount,
-      totalInterestAccrued
+      totalInterestAccrued,
+      monthlyInterest: totalMonthlyInterest,
+      annualInterest: totalAnnualInterest
     })
   }, [debts])
 
@@ -227,6 +250,61 @@ export default function Dashboard({ debts }) {
           </span>
         </div>
       </div>
+
+      {/* Interest Tracking Section */}
+      {(stats.monthlyInterest > 0 || stats.annualInterest > 0) && (
+        <div className="interest-section">
+          <div className="interest-header">
+            <h2>💹 Interest Analysis</h2>
+            <p>Based on your current outstanding balances and interest rates</p>
+          </div>
+          
+          <div className="interest-stats">
+            <div className="interest-card monthly">
+              <div className="interest-icon">📅</div>
+              <div className="interest-content">
+                <h3>Monthly Interest</h3>
+                <div className="interest-value">{formatCurrency(stats.monthlyInterest)}</div>
+                <div className="interest-description">
+                  Interest accruing per month on remaining balances
+                </div>
+              </div>
+            </div>
+            
+            <div className="interest-card annual">
+              <div className="interest-icon">📈</div>
+              <div className="interest-content">
+                <h3>Annual Interest</h3>
+                <div className="interest-value">{formatCurrency(stats.annualInterest)}</div>
+                <div className="interest-description">
+                  Total interest per year on current balances
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="interest-insight">
+            <div className="insight-box">
+              <h4>💡 Interest Insights</h4>
+              <div className="insight-content">
+                {stats.monthlyInterest > 0 ? (
+                  <p>
+                    You're currently paying <strong>{formatCurrency(stats.monthlyInterest)}</strong> in 
+                    interest each month. Making extra payments can significantly reduce your total interest cost!
+                  </p>
+                ) : (
+                  <p>Great job! You have no active interest-bearing debts.</p>
+                )}
+                {stats.annualInterest > stats.monthlyInterest * 12 && (
+                  <p className="compound-warning">
+                    ⚠️ Compound interest effect detected. Consider prioritizing higher interest rate debts.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Bottom Row - Side by Side */}
       <div className="dashboard-bottom-row">
