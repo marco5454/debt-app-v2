@@ -110,6 +110,7 @@ export default function Payments({ debts, onMakePayment }) {
     <div className="payments-container">
       <div className="payments-header">
         <h2>Payments & Debt Management</h2>
+        <p>Manage your debt payments and track your financial progress</p>
         <div className="payments-summary">
           <div className="summary-item">
             <span className="summary-label">Total Payments Made</span>
@@ -130,8 +131,31 @@ export default function Payments({ debts, onMakePayment }) {
         </div>
       </div>
 
-      {/* Main Content - Side by Side */}
+      {/* Three Column Layout */}
       <div className="payments-main-content">
+        {/* Statistics Column */}
+        <div className="payment-stats-section">
+          <h3>Payment Statistics</h3>
+          <div className="stats-grid-payment">
+            <div className="stat-item-payment total">
+              <div className="stat-label">Total Debt Amount</div>
+              <div className="stat-value">{formatCurrency(totalDebtAmount)}</div>
+            </div>
+            <div className="stat-item-payment average">
+              <div className="stat-label">Average Payment</div>
+              <div className="stat-value">{formatCurrency(averagePayment)}</div>
+            </div>
+            <div className="stat-item-payment monthly">
+              <div className="stat-label">This Month Total</div>
+              <div className="stat-value">{formatCurrency(thisMonthTotal)}</div>
+            </div>
+            <div className="stat-item-payment remaining">
+              <div className="stat-label">Remaining Debt</div>
+              <div className="stat-value">{formatCurrency(totalRemainingDebt)}</div>
+            </div>
+          </div>
+        </div>
+
         {/* Quick Pay Section */}
         {activeDebts.length > 0 && (
           <div className="quick-pay-section">
@@ -175,7 +199,7 @@ export default function Payments({ debts, onMakePayment }) {
           </div>
         )}
 
-        {/* Simple Payment History */}
+        {/* Payment History */}
         <div className="simple-payment-history">
           <h3>Recent Payments</h3>
           {loading ? (
