@@ -39,6 +39,16 @@
   color: #ecf0f1;
 }
 
+.contact-info {
+  margin-top: 10px;
+}
+
+.contact-info p {
+  margin: 5px 0;
+  font-size: 0.85rem;
+  color: #bdc3c7;
+}
+
 .social-links {
   display: flex;
   gap: 15px;
@@ -51,11 +61,21 @@
   font-size: 0.9rem;
   font-weight: 500;
   transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-link svg {
+  transition: all 0.3s ease;
 }
 
 .social-link:hover {
   color: #3498db;
-  text-decoration: underline;
+}
+
+.social-link:hover svg {
+  transform: scale(1.1);
 }
 
 /* Responsive design */
