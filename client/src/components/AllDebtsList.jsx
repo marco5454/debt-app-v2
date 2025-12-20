@@ -147,7 +147,7 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
 
               return (
                 <tr key={debt._id} className="debt-row">
-                  <td className="debt-name">
+                  <td className="debt-name" data-label="Debt Name">
                     <div className="debt-name-cell">
                       <span>{debt.name}</span>
                       <div className="debt-actions">
@@ -166,8 +166,8 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
                       </div>
                     </div>
                   </td>
-                  <td className="debt-amount">{formatCurrency(debt.totalAmount)}</td>
-                  <td>
+                  <td className="debt-amount" data-label="Total Amount">{formatCurrency(debt.totalAmount)}</td>
+                  <td data-label="Progress">
                     <div className="progress-bar-container">
                       <div className="progress-bar">
                         <div 
@@ -178,14 +178,14 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
                       <span className="progress-text">{progressPercent}%</span>
                     </div>
                   </td>
-                  <td className="debt-amount">{formatCurrency(remainingAmount)}</td>
-                  <td>{formatDate(debt.dateOfLoan)}</td>
-                  <td>{debt.interestRate ? `${debt.interestRate}%` : 'N/A'}</td>
-                  <td>{formatCurrency(debt.monthlyPayment)}</td>
-                  <td className={`debt-amount ${interestAccrued > 0 ? 'interest-warning' : ''}`}>
+                  <td className="debt-amount" data-label="Remaining">{formatCurrency(remainingAmount)}</td>
+                  <td data-label="Date">{formatDate(debt.dateOfLoan)}</td>
+                  <td data-label="Interest Rate">{debt.interestRate ? `${debt.interestRate}%` : 'N/A'}</td>
+                  <td data-label="Monthly Payment">{formatCurrency(debt.monthlyPayment)}</td>
+                  <td className={`debt-amount ${interestAccrued > 0 ? 'interest-warning' : ''}`} data-label="Interest Accrued">
                     {formatCurrency(interestAccrued)}
                   </td>
-                  <td className="debt-status">
+                  <td className="debt-status" data-label="Status">
                     {(() => {
                       const isPaid = (debt.totalPaid || 0) >= debt.totalAmount
                       const progress = debt.totalAmount > 0 ? (debt.totalPaid || 0) / debt.totalAmount : 0

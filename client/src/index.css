@@ -23,19 +23,182 @@ html, body {
     margin-bottom: 16px;
   }
   
-  /* Better table behavior on mobile */
-  table {
-    font-size: 0.85rem;
-    width: 100%;
-    overflow-x: auto;
-    display: block;
-    white-space: nowrap;
+  /* Better table behavior on mobile - Convert tables to cards */
+  .debts-table thead,
+  .debt-table thead,
+  table thead {
+    display: none;
   }
   
-  table thead, table tbody, table tr {
-    display: table;
+  .debts-table,
+  .debt-table,
+  table {
+    border: none;
     width: 100%;
-    table-layout: fixed;
+    font-size: 0.9rem;
+  }
+  
+  .debts-table tbody,
+  .debt-table tbody,
+  table tbody {
+    display: block;
+    width: 100%;
+  }
+  
+  .debts-table tr,
+  .debt-table tr,
+  table tr {
+    display: block;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .debts-table td,
+  .debt-table td,
+  table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .debts-table td:last-child,
+  .debt-table td:last-child,
+  table td:last-child {
+    border-bottom: none;
+    margin-top: 8px;
+  }
+  
+  /* Add labels for mobile */
+  .debts-table td:before,
+  .debt-table td:before,
+  table td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #666;
+    flex-basis: 40%;
+    text-align: left;
+    margin-right: 12px;
+  }
+  
+  /* Mobile button improvements */
+  .debt-actions {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+  }
+  
+  .debt-actions .btn {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even smaller screens - improve spacing */
+  .debts-table tr,
+  .debt-table tr,
+  table tr {
+    margin-bottom: 16px;
+    padding: 12px;
+  }
+  
+  .debts-table td:before,
+  .debt-table td:before,
+  table td:before {
+    flex-basis: 45%;
+    font-size: 0.85rem;
+  }
+  
+  .debt-actions .btn {
+    padding: 14px 18px;
+    font-size: 15px;
+    min-height: 48px;
+  }
+  
+  /* Improve container spacing */
+  .container {
+    padding: 12px;
+  }
+  
+  .all-debts-container {
+    padding: 12px;
+  }
+  
+  /* Mobile header improvements */
+  .header {
+    padding: 12px;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  
+  /* Navigation improvements */
+  .nav-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  
+  .nav-buttons .btn {
+    min-width: 120px;
+    padding: 10px 16px;
+  }
+  
+  /* Modal improvements */
+  .modal-overlay {
+    padding: 10px;
+  }
+  
+  .modal-content,
+  .debt-form,
+  .payment-form {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 12px;
+  }
+  
+  /* Form improvements */
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    min-height: 44px;
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+  
+  /* Dashboard cards mobile */
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .stat-card {
+    padding: 20px;
+    text-align: center;
   }
 }
 
@@ -952,17 +1115,26 @@ body {
 }
 
 @media (max-width: 768px) {
+  .debt-actions {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+  }
+  
   .debt-actions .btn {
-    padding: 6px 12px;
-    font-size: 0.85rem;
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 44px;
   }
 }
 
 @media (max-width: 480px) {
   .debt-actions .btn {
-    padding: 8px 12px;
-    font-size: 0.8rem;
-    min-height: 36px;
+    padding: 14px 18px;
+    font-size: 15px;
+    min-height: 48px;
   }
 }
 
@@ -4342,6 +4514,26 @@ body {
   z-index: 1001;
   animation: slideInRight 0.4s ease-out, fadeOut 0.4s ease-out 2.6s forwards;
   min-width: 200px;
+  max-width: calc(100vw - 40px);
+}
+
+@media (max-width: 768px) {
+  .feedback-notification,
+  .success-notification {
+    top: 70px;
+    left: 10px;
+    right: 10px;
+    min-width: unset;
+    max-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .feedback-notification,
+  .success-notification {
+    top: 60px;
+    padding: 12px 16px;
+  }
 }
 
 .notification-content {
