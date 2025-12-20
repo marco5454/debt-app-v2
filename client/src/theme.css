@@ -18,48 +18,48 @@
   --color-info-800: #0057E4;
   --color-info-700: #0070FF;
   --color-info-600: #0088FF;
-  --color-info-500: #3498db; /* Main blue */
-  --color-info-400: #6FB9F5;
-  --color-info-300: #9FCDFF;
+  --color-info-500: #0070FF; /* Main blue */
+  --color-info-400: #4F9EF8;
+  --color-info-300: #8FCCFF;
   --color-info-200: #C7E0FF;
   --color-info-100: #E5F2FF;
   --color-info-50: #F0F7FF;
 
   /* Success Colors (Greens) - For paid debts, positive actions */
   --color-success-900: #185E0D;
-  --color-success-800: #398E3C;
-  --color-success-700: #4CAF50;
-  --color-success-600: #66C784;
-  --color-success-500: #27ae60; /* Main green */
-  --color-success-400: #8DD49E;
-  --color-success-300: #B5E5C4;
+  --color-success-800: #188E30;
+  --color-success-700: #338E3C;
+  --color-success-600: #4CAF50;
+  --color-success-500: #4CAF50; /* Main green */
+  --color-success-400: #8BC784;
+  --color-success-300: #C8EFCA;
   --color-success-200: #D4EDDA;
   --color-success-100: #E8F5E8;
-  --color-success-50: #FFFFFF;
+  --color-success-50: #EFFFFD;
 
   /* Warning Colors (Orange/Yellow) - For alerts, pending items */
   --color-warning-900: #FF8800;
-  --color-warning-800: #FF9900;
-  --color-warning-700: #FFA500;
-  --color-warning-600: #FFCC00;
-  --color-warning-500: #f39c12; /* Main orange */
-  --color-warning-400: #FFD039;
-  --color-warning-300: #FFDD66;
+  --color-warning-800: #FF9800;
+  --color-warning-700: #FFB800;
+  --color-warning-600: #FFCD00;
+  --color-warning-500: #FFCD00; /* Main orange */
+  --color-warning-400: #FFDD39;
+  --color-warning-300: #FFFA88;
   --color-warning-200: #FFE999;
   --color-warning-100: #FFF4CC;
-  --color-warning-50: #FFF8A0;
+  --color-warning-50: #FFFFA0;
 
   /* Error Colors (Reds) - For overdue debts, errors */
   --color-error-900: #C70101;
   --color-error-800: #F10000;
   --color-error-700: #FF2C2C;
   --color-error-600: #FF6666;
-  --color-error-500: #e74c3c; /* Main red */
+  --color-error-500: #FF2C2C; /* Main red */
   --color-error-400: #FF9999;
   --color-error-300: #FFCCCC;
-  --color-error-200: #FFD6D6;
+  --color-error-200: #FFD1DD;
   --color-error-100: #FFE5E5;
-  --color-error-50: #FFFFFF;
+  --color-error-50: #FFF5F5;
 
   /* Neutral Colors - For backgrounds, text, borders */
   --color-neutral-900: #2c3e50;
