@@ -2169,3 +2169,368 @@ table th {
     font-size: 0.9rem;
   }
 }
+
+/* ========== FEEDBACK MODAL STYLES ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+.modal-content {
+  background: linear-gradient(135deg, var(--bg-primary), rgba(255, 255, 255, 0.02));
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--border-light);
+  max-width: 580px;
+  width: 100%;
+  max-height: 85vh;
+  overflow: hidden;
+  position: relative;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.report-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-info-400), var(--color-success-400));
+}
+
+.report-form {
+  padding: 2.5rem;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.report-form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.report-form::-webkit-scrollbar-track {
+  background: var(--color-neutral-100);
+  border-radius: 3px;
+}
+
+.report-form::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+.report-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border-light);
+  position: relative;
+}
+
+.report-form-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+.report-form-header h2 {
+  font-family: var(--font-headings);
+  color: var(--text-primary);
+  font-size: 1.75rem;
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-info-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-close {
+  background: var(--color-neutral-100);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-close:hover {
+  background: var(--color-error-100);
+  color: var(--color-error-600);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.report-form .form-group {
+  margin-bottom: 2rem;
+}
+
+.report-form .form-group:last-of-type {
+  margin-bottom: 2.5rem;
+}
+
+.report-form label {
+  font-family: var(--font-primary);
+  display: block;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.report-form label small {
+  font-weight: var(--font-weight-normal);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.report-form select,
+.report-form textarea,
+.report-form input[type="email"] {
+  font-family: var(--font-primary);
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.report-form select:focus,
+.report-form textarea:focus,
+.report-form input[type="email"]:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: var(--bg-primary);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.02),
+    0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.report-form select {
+  cursor: pointer;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 12px;
+  appearance: none;
+}
+
+.report-form textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: var(--font-primary);
+}
+
+.report-form textarea::placeholder,
+.report-form input[type="email"]::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.report-form-actions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+  justify-content: flex-end;
+}
+
+.report-form-actions .btn {
+  min-width: 120px;
+  padding: 0.875rem 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  font-size: 1rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-primary);
+}
+
+.report-form-actions .btn-secondary {
+  background: var(--color-neutral-100);
+  color: var(--text-secondary);
+  border-color: var(--border-light);
+}
+
+.report-form-actions .btn-secondary:hover {
+  background: var(--color-neutral-200);
+  color: var(--text-primary);
+  border-color: var(--color-neutral-300);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.report-form-actions .btn-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-info-600));
+  color: var(--text-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.report-form-actions .btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-primary-hover), var(--color-info-700));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.report-form-actions .btn-primary:disabled {
+  background: var(--color-neutral-300);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Feedback Notification */
+.feedback-notification {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  background: linear-gradient(135deg, var(--color-success-500), var(--color-success-600));
+  color: var(--text-white);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 1001;
+  animation: notificationSlideIn 0.3s ease-out;
+}
+
+@keyframes notificationSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+.notification-icon {
+  font-size: 1.25rem;
+}
+
+.notification-text {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+}
+
+/* Responsive Design for Modal */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 1rem;
+  }
+  
+  .modal-content {
+    max-width: 100%;
+    max-height: 90vh;
+    margin: 0;
+  }
+  
+  .report-form {
+    padding: 2rem 1.5rem;
+  }
+  
+  .report-form-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .report-form-actions {
+    flex-direction: column;
+  }
+  
+  .report-form-actions .btn {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .feedback-notification {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .report-form {
+    padding: 1.5rem 1rem;
+  }
+  
+  .report-form-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+  
+  .report-form .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .btn-close {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+}
