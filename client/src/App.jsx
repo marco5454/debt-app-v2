@@ -8,6 +8,7 @@ import Footer from './components/Footer'
 import PaymentForm from './components/PaymentForm'
 import Payments from './components/Payments'
 import AllDebtsList from './components/AllDebtsList'
+import FAQ from './components/FAQ'
 import './App.css'
 
 function ProtectedRoute({ isAuthenticated, children }) {
@@ -96,6 +97,12 @@ function AppContent({
             >
               Payments
             </Link>
+            <Link 
+              to="/faq" 
+              className={`nav-item ${location.pathname === '/faq' ? 'active' : ''}`}
+            >
+              FAQ
+            </Link>
           </div>
         </nav>
 
@@ -131,6 +138,11 @@ function AppContent({
               ) : (
                 <Payments debts={debts} onMakePayment={setPaymentDebt} />
               )}
+            </div>
+          } />
+          <Route path="/faq" element={
+            <div className="container">
+              <FAQ />
             </div>
           } />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
