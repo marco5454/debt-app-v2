@@ -17,6 +17,7 @@ export default function Dashboard({ debts }) {
   })
   
   const [showReportModal, setShowReportModal] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
   const [reportData, setReportData] = useState({
     type: 'issue',
     message: '',
@@ -143,13 +144,18 @@ export default function Dashboard({ debts }) {
         throw new Error(result.message || `HTTP Error: ${response.status}`)
       }
 
-      alert('Thank you for reaching out! We appreciate your feedback and will review it.')
+      setShowNotification(true)
       setShowReportModal(false)
       setReportData({
         type: 'issue',
         message: '',
         email: ''
       })
+      
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        setShowNotification(false)
+      }, 3000)
     } catch (error) {
       console.error('Detailed error submitting report:', error)
       console.error('Error name:', error.name)
@@ -477,6 +483,16 @@ export default function Dashboard({ debts }) {
           <div className="empty-icon">🎉</div>
           <h3>No Debts Yet!</h3>
           <p>Start by adding your first debt to track your financial progress.</p>
+        </div>
+      )}
+
+      {/* Custom Notification */}
+      {showNotification && (
+        <div className="feedback-notification">
+          <div className="notification-content">
+            <span className="notification-icon">✅</span>
+            <span className="notification-text">Feedback saved!</span>
+          </div>
         </div>
       )}
 

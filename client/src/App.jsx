@@ -50,7 +50,7 @@ function AppContent({
             ) : notification.type === 'logout' ? (
               <>⏰ {notification.message}</>
             ) : (
-              <>✓ You paid <strong>{notification.amount}</strong> successfully!</>
+              <>✓ Payment added successfully!</>
             )}
           </div>
         )}
@@ -424,7 +424,7 @@ function App() {
       
       setNotification({ 
         type: 'debt',
-        message: `Debt "${debtData.name}" added for ${formattedAmount}` 
+        message: `Debt added successfully!` 
       })
       setTimeout(() => setNotification(null), 3500)
     } catch (err) {
@@ -463,7 +463,7 @@ function App() {
 
       setNotification({
         type: 'debt',
-        message: `Debt "${debtData.name}" updated successfully`
+        message: `Debt updated successfully!`
       })
       setTimeout(() => setNotification(null), 3500)
     } catch (err) {

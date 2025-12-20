@@ -10,6 +10,7 @@ function Register({ onRegister }) {
   })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -87,11 +88,16 @@ function Register({ onRegister }) {
       }
 
       // Registration successful
-      alert('Registration successful! Please login with your credentials.')
-      if (typeof onRegister === 'function') {
-        onRegister()
-      }
-      navigate('/login')
+      setShowNotification(true)
+      
+      // Hide notification after 2.5 seconds and navigate
+      setTimeout(() => {
+        setShowNotification(false)
+        if (typeof onRegister === 'function') {
+          onRegister()
+        }
+        navigate('/login')
+      }, 2500)
     } catch (err) {
       // Handle network errors
       if (err instanceof TypeError && err.message.includes('fetch')) {
@@ -107,6 +113,16 @@ function Register({ onRegister }) {
 
   return (
     <div className="login-card">
+      {/* Custom Notification */}
+      {showNotification && (
+        <div className="success-notification">
+          <div className="notification-content">
+            <span className="notification-icon">✅</span>
+            <span className="notification-text">Account created successfully!</span>
+          </div>
+        </div>
+      )}
+      
       <div className="login-header">
         <h1>💰 Debt Tracker</h1>
         <p>Create your account</p>
