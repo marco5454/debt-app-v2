@@ -7,8 +7,8 @@ import userRoutes from './routes/userRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 
-// Load environment variables from .env file
-dotenv.config();
+// Load environment variables from .env file in parent directory
+dotenv.config({ path: '../.env' });
 
 // Create Express app
 const app = express();
