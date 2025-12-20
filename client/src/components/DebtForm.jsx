@@ -135,11 +135,11 @@ function DebtForm({ onAddDebt, onUpdateDebt, debtToEdit, onClose }) {
   }
 
   return (
-    <div className="debt-form">
-      <div className="debt-form-header">
-        <h2>{isEditMode ? 'Update Debt' : 'Add New Debt'}</h2>
+    <div className="modal-content">
+      <div className="modal-header">
+        <h2 className="modal-title">{isEditMode ? 'Update Debt' : 'Add New Debt'}</h2>
         <button 
-          className="btn-close" 
+          className="modal-close" 
           onClick={onClose}
           aria-label="Close"
         >
@@ -147,130 +147,148 @@ function DebtForm({ onAddDebt, onUpdateDebt, debtToEdit, onClose }) {
         </button>
       </div>
       
-      {formError && (
-        <div className="error" style={{ marginBottom: '20px' }}>
-          {formError}
-        </div>
-      )}
+      <div className="modal-body">
+        {formError && (
+          <div className="error" style={{ marginBottom: '20px' }}>
+            {formError}
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">
-            Debt Name <span style={{ color: 'var(--color-error)' }}>*</span>
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="e.g., Credit Card, Car Loan"
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">
+              Debt Name <span style={{ color: 'var(--color-error)' }}>*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              className="form-control"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="e.g., Credit Card, Car Loan"
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="totalAmount">
-            Total Amount (₱) <span style={{ color: 'var(--color-error)' }}>*</span>
-          </label>
-          <input
-            type="number"
-            id="totalAmount"
-            name="totalAmount"
-            value={formData.totalAmount}
-            onChange={handleChange}
-            placeholder="0.00"
-            step="0.01"
-            min="0"
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="totalAmount">
+              Total Amount (₱) <span style={{ color: 'var(--color-error)' }}>*</span>
+            </label>
+            <input
+              type="number"
+              id="totalAmount"
+              name="totalAmount"
+              className="form-control"
+              value={formData.totalAmount}
+              onChange={handleChange}
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="interestRate">
-            Interest Rate (%) <small>(optional - enables interest tracking)</small>
-          </label>
-          <input
-            type="number"
-            id="interestRate"
-            name="interestRate"
-            value={formData.interestRate}
-            onChange={handleChange}
-            placeholder="e.g., 18.5 for 18.5% annual rate"
-            step="0.01"
-            min="0"
-            max="100"
-          />
-          <small>💡 Enter the annual interest rate to track monthly and yearly interest costs</small>
-        </div>
+          <div className="form-group">
+            <label htmlFor="interestRate">
+              Interest Rate (%) <small>(optional - enables interest tracking)</small>
+            </label>
+            <input
+              type="number"
+              id="interestRate"
+              name="interestRate"
+              className="form-control"
+              value={formData.interestRate}
+              onChange={handleChange}
+              placeholder="e.g., 18.5 for 18.5% annual rate"
+              step="0.01"
+              min="0"
+              max="100"
+            />
+            <small>💡 Enter the annual interest rate to track monthly and yearly interest costs</small>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="monthlyPayment">
-            Monthly Payment (₱) <small>(optional)</small>
-          </label>
-          <input
-            type="number"
-            id="monthlyPayment"
-            name="monthlyPayment"
-            value={formData.monthlyPayment}
-            onChange={handleChange}
-            placeholder="0.00"
-            step="0.01"
-            min="0.01"
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="monthlyPayment">
+              Monthly Payment (₱) <small>(optional)</small>
+            </label>
+            <input
+              type="number"
+              id="monthlyPayment"
+              name="monthlyPayment"
+              className="form-control"
+              value={formData.monthlyPayment}
+              onChange={handleChange}
+              placeholder="0.00"
+              step="0.01"
+              min="0.01"
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="dateOfLoan">
-            Date of Loan <span style={{ color: 'var(--color-error)' }}>*</span>
-          </label>
-          <input
-            type="date"
-            id="dateOfLoan"
-            name="dateOfLoan"
-            value={formData.dateOfLoan}
-            onChange={handleChange}
-            required
-          />
-          <small>When did you take this loan?</small>
-        </div>
+          <div className="form-group">
+            <label htmlFor="dateOfLoan">
+              Date of Loan <span style={{ color: 'var(--color-error)' }}>*</span>
+            </label>
+            <input
+              type="date"
+              id="dateOfLoan"
+              name="dateOfLoan"
+              className="form-control"
+              value={formData.dateOfLoan}
+              onChange={handleChange}
+              required
+            />
+            <small>When did you take this loan?</small>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="creditor">
-            Creditor/Lender <small>(optional)</small>
-          </label>
-          <input
-            type="text"
-            id="creditor"
-            name="creditor"
-            value={formData.creditor}
-            onChange={handleChange}
-            placeholder="e.g., Bank ABC, Credit Card Company"
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="creditor">
+              Creditor/Lender <small>(optional)</small>
+            </label>
+            <input
+              type="text"
+              id="creditor"
+              name="creditor"
+              className="form-control"
+              value={formData.creditor}
+              onChange={handleChange}
+              placeholder="e.g., Bank ABC, Credit Card Company"
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="description">
-            Description/Notes <small>(optional)</small>
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Additional notes about this debt..."
-            rows="3"
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="description">
+              Description/Notes <small>(optional)</small>
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              className="form-control"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Additional notes about this debt..."
+              rows="3"
+            />
+          </div>
 
-        <button 
-          type="submit" 
-          className="btn btn-primary"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update Debt' : 'Add Debt')}
-        </button>
-      </form>
+          <div className="form-actions">
+            <button 
+              type="button" 
+              className="btn btn-secondary"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              className="btn btn-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update Debt' : 'Add Debt')}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

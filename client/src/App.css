@@ -314,36 +314,44 @@
 
 /* Form styles */
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
-  color: var(--text-primary);
+  margin-bottom: 8px;
+  color: #333333;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 14px;
+  letter-spacing: 0.25px;
 }
 
 .form-control {
   width: 100%;
-  padding: 14px 16px;
-  border: 2px solid var(--border-light);
-  border-radius: var(--radius-md);
+  padding: 16px 14px;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
   font-size: 16px;
-  transition: all 0.3s ease;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  transition: all 0.2s ease;
+  background-color: #FFFFFF;
+  color: #333333;
+  font-family: inherit;
 }
 
 .form-control:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
+  border-color: #0070FF;
+  box-shadow: 0 0 0 3px rgba(0, 112, 255, 0.1);
+  background-color: #FAFAFA;
 }
 
 .form-control:invalid {
-  border-color: var(--color-error);
+  border-color: #FF2C2C;
+}
+
+.form-control::placeholder {
+  color: #9E9E9E;
+  font-size: 14px;
 }
 
 /* Loading and error states */
@@ -355,13 +363,23 @@
 }
 
 .error {
-  background-color: var(--bg-error);
-  color: var(--text-error);
-  padding: 1rem 1.5rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-error-300);
-  margin-bottom: 1.5rem;
+  background-color: #FFF5F5;
+  color: #C53030;
+  padding: 16px 20px;
+  border-radius: 8px;
+  border: 1px solid #FED7D7;
+  margin-bottom: 24px;
   font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error::before {
+  content: "⚠";
+  color: #FF2C2C;
+  font-size: 16px;
 }
 
 /* Modal styles */
@@ -371,26 +389,87 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 51, 136, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 20px;
+  animation: modalOverlayFade 0.2s ease;
+}
+
+@keyframes modalOverlayFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
-  background-color: var(--bg-primary);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  max-width: 600px;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
   width: 100%;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
+  animation: modalSlideUp 0.3s ease;
 }
 
-/* Status badges for debts */
+@keyframes modalSlideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  padding: 24px 24px 16px 24px;
+  border-bottom: 1px solid #F0F0F0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333333;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: #9E9E9E;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: #F5F5F5;
+  color: #333333;
+}
+
+.modal-body {
+  padding: 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Form Actions */\n.form-actions {\n  display: flex;\n  gap: 12px;\n  justify-content: flex-end;\n  margin-top: 32px;\n  padding-top: 24px;\n  border-top: 1px solid #F0F0F0;\n}\n\n/* Status badges for debts */
 .status-badge {
   padding: 6px 16px;
   border-radius: 20px;
