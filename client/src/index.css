@@ -2226,6 +2226,78 @@ body {
   color: #666;
 }
 
+/* Initial Loading Animation */
+.initial-loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-animation {
+  text-align: center;
+  color: white;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 30px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.loading-text p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  font-weight: 400;
+  margin: 0;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Mobile responsiveness for loading screen */
+@media (max-width: 768px) {
+  .loading-text h2 {
+    font-size: 1.8rem;
+  }
+  
+  .loading-text p {
+    font-size: 1rem;
+    padding: 0 20px;
+  }
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 25px;
+  }
+}
+
 .error {
   background-color: #ffebee;
   color: #c62828;

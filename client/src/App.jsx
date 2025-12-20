@@ -317,6 +317,10 @@ function App() {
   const [debts, setDebts] = useState([])
   // State to track loading status
   const [loading, setLoading] = useState(true)
+  // State for initial app loading
+  const [initialLoading, setInitialLoading] = useState(true)
+  // State for post-login loading
+  const [postLoginLoading, setPostLoginLoading] = useState(false)
   // State to track errors
   const [error, setError] = useState(null)
   // State to control modal visibility
@@ -330,13 +334,24 @@ function App() {
 
   // Check if user is logged in on mount
   useEffect(() => {
-    const loggedIn = localStorage.getItem('isLoggedIn') === 'true'
-    setIsAuthenticated(loggedIn)
-    if (loggedIn) {
-      fetchDebts()
-    } else {
-      setLoading(false)
+    const initializeApp = async () => {
+      // Show loading animation for at least 1.5 seconds for good UX
+      const loadingPromise = new Promise(resolve => setTimeout(resolve, 1500))
+      
+      const loggedIn = localStorage.getItem('isLoggedIn') === 'true'
+      setIsAuthenticated(loggedIn)
+      
+      if (loggedIn) {
+        await Promise.all([fetchDebts(), loadingPromise])
+      } else {
+        await loadingPromise
+        setLoading(false)
+      }
+      
+      setInitialLoading(false)
     }
+    
+    initializeApp()
   }, [])
 
   // Auto-logout functionality when tab/browser is closed for 15 seconds
@@ -410,12 +425,21 @@ function App() {
   }, [isAuthenticated])
 
   // Handle login
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setError(null)
+    setPostLoginLoading(true)
+    
+    // Show loading animation for at least 2 seconds for good UX
+    const loadingPromise = new Promise(resolve => setTimeout(resolve, 2000))
+    
     setIsAuthenticated(true)
     // Initialize last active time when user logs in
     localStorage.setItem('lastActiveTime', Date.now().toString())
-    fetchDebts()
+    
+    // Wait for both data fetching and minimum loading time
+    await Promise.all([fetchDebts(), loadingPromise])
+    
+    setPostLoginLoading(false)
   }
 
   // Handle automatic logout with notification
@@ -635,6 +659,36 @@ function App() {
       setError(err.message)
       console.error('Error deleting debt:', err)
     }
+  }
+
+  // Show initial loading animation
+  if (initialLoading) {
+    return (
+      <div className="initial-loading-container">
+        <div className="loading-animation">
+          <div className="spinner"></div>
+          <div className="loading-text">
+            <h2>Debt Tracker</h2>
+            <p>Loading your financial dashboard...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Show post-login loading animation
+  if (postLoginLoading) {
+    return (
+      <div className="initial-loading-container">
+        <div className="loading-animation">
+          <div className="spinner"></div>
+          <div className="loading-text">
+            <h2>Welcome Back!</h2>
+            <p>Setting up your dashboard...</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
