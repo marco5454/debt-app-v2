@@ -66,16 +66,16 @@ function AppContent({
         )}
         <header className="header">
           <div className="header-content">
+            <button 
+              className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
+              onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+            >
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+            </button>
             <div className="header-info">
-              <button 
-                className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
-                onClick={toggleMobileMenu}
-                aria-label="Toggle menu"
-              >
-                <span className="hamburger-line"></span>
-                <span className="hamburger-line"></span>
-                <span className="hamburger-line"></span>
-              </button>
               <div className="header-text">
                 <h1 className="app-title">💰 Debt Tracker</h1>
                 <p className="tagline">Manage and track your debts</p>
