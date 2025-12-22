@@ -2,6 +2,8 @@ import { useState } from 'react'
 
 export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [debtToDelete, setDebtToDelete] = useState(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   if (!debts || debts.length === 0) {
     return (
@@ -82,17 +84,49 @@ export default function AllDebtsList({ debts, onEditDebt, onDeleteDebt }) {
   }
 
   const handleDeleteClick = (debt) => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete "${debt.name}"?\n\nThis action cannot be undone and will permanently remove this debt record.`
-    )
-    
-    if (confirmDelete && onDeleteDebt) {
-      onDeleteDebt(debt._id)
+    setDebtToDelete(debt)
+    setShowDeleteModal(true)
+  }
+
+  const handleConfirmDelete = () => {
+    if (debtToDelete && onDeleteDebt) {
+      onDeleteDebt(debtToDelete._id)
     }
+    setShowDeleteModal(false)
+    setDebtToDelete(null)
+  }
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false)
+    setDebtToDelete(null)
   }
 
   return (
     <div className="debts-page">
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="delete-modal-overlay" onClick={handleCancelDelete}>
+          <div className="delete-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="delete-modal-header">
+              <div className="delete-modal-icon">⚠️</div>
+              <h2>Delete Debt</h2>
+            </div>
+            <div className="delete-modal-body">
+              <p>Are you sure you want to delete <strong>"{debtToDelete?.name}"</strong>?</p>
+              <p className="delete-modal-warning">This action cannot be undone and will permanently remove this debt record.</p>
+            </div>
+            <div className="delete-modal-actions">
+              <button className="btn btn-cancel" onClick={handleCancelDelete}>
+                Cancel
+              </button>
+              <button className="btn btn-delete-confirm" onClick={handleConfirmDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="debts-page-header">
         <h1>All Debts</h1>
         <p>Track and manage all your debts in one place</p>

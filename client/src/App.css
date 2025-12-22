@@ -1031,6 +1031,147 @@
   overflow-y: auto;
 }
 
+/* Delete Confirmation Modal */
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 51, 187, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: modalOverlayFade 0.2s ease;
+}
+
+.delete-modal-content {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+  max-width: 450px;
+  width: 100%;
+  animation: modalSlideUp 0.3s ease;
+  overflow: hidden;
+}
+
+.delete-modal-header {
+  padding: 24px 24px 20px 24px;
+  background-color: var(--color-warning-50);
+  border-bottom: 2px solid var(--color-warning-300);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.delete-modal-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.delete-modal-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-warning-900);
+}
+
+.delete-modal-body {
+  padding: 24px;
+  color: var(--text-primary);
+}
+
+.delete-modal-body p {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.delete-modal-body p strong {
+  color: var(--color-info-700);
+  font-weight: 600;
+}
+
+.delete-modal-warning {
+  color: var(--color-error-700);
+  font-size: 14px !important;
+  font-weight: 500;
+}
+
+.delete-modal-actions {
+  padding: 16px 24px;
+  background-color: var(--bg-secondary);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.btn-cancel {
+  padding: 10px 24px;
+  background-color: #FFFFFF;
+  color: var(--text-primary);
+  border: 2px solid var(--color-neutral-300);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background-color: var(--color-neutral-100);
+  border-color: var(--color-neutral-400);
+}
+
+.btn-delete-confirm {
+  padding: 10px 24px;
+  background-color: var(--color-error-700);
+  color: #FFFFFF;
+  border: 2px solid var(--color-error-700);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-confirm:hover {
+  background-color: var(--color-error-900);
+  border-color: var(--color-error-900);
+}
+
+.btn-delete-confirm:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 480px) {
+  .delete-modal-content {
+    max-width: 90vw;
+  }
+  
+  .delete-modal-header {
+    padding: 20px;
+  }
+  
+  .delete-modal-body {
+    padding: 20px;
+  }
+  
+  .delete-modal-actions {
+    padding: 12px 20px;
+    flex-direction: column-reverse;
+  }
+  
+  .btn-cancel,
+  .btn-delete-confirm {
+    width: 100%;
+  }
+}
+
 /* Form Actions */\n.form-actions {\n  display: flex;\n  gap: 12px;\n  justify-content: flex-end;\n  margin-top: 32px;\n  padding-top: 24px;\n  border-top: 1px solid #F0F0F0;\n}\n\n/* Status badges for debts */
 .status-badge {
   padding: 6px 16px;
