@@ -11,6 +11,7 @@ import AllDebtsList from './components/AllDebtsList'
 import PaidDebts from './components/PaidDebts'
 import FAQ from './components/FAQ'
 import PrivacyPolicy from './components/PrivacyPolicy'
+import ScrollToTopButton from './components/ScrollToTopButton';
 import './App.css'
 
 function ProtectedRoute({ isAuthenticated, children }) {
@@ -332,6 +333,8 @@ function AppContent({
             </div>
           </div>
         )}
+
+        <ScrollToTopButton />
       </div>
 
       <Footer />

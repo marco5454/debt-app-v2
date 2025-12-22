@@ -14,52 +14,52 @@
   --font-weight-extrabold: 800;
   
   /* Info Colors (Blues) - For general info, primary actions */
-  --color-info-900: #003388;
-  --color-info-800: #0057E4;
-  --color-info-700: #0070FF;
-  --color-info-600: #0088FF;
-  --color-info-500: #0070FF; /* Main blue */
-  --color-info-400: #4F9EF8;
-  --color-info-300: #8FCCFF;
-  --color-info-200: #C7E0FF;
-  --color-info-100: #E5F2FF;
-  --color-info-50: #F0F7FF;
+  --color-info-900: #0033BB;
+  --color-info-800: #0055E4;
+  --color-info-700: #007CFF;
+  --color-info-600: #00B9FF;
+  --color-info-500: #007CFF; /* Main blue */
+  --color-info-400: #00B9FF;
+  --color-info-300: #6FEFEB;
+  --color-info-200: #B3F5F2;
+  --color-info-100: #EFF7FF;
+  --color-info-50: #EFF7FF;
 
   /* Success Colors (Greens) - For paid debts, positive actions */
-  --color-success-900: #185E0D;
-  --color-success-800: #188E30;
-  --color-success-700: #338E3C;
-  --color-success-600: #4CAF50;
-  --color-success-500: #4CAF50; /* Main green */
+  --color-success-900: #1B5E20;
+  --color-success-800: #388E3C;
+  --color-success-700: #66AF50;
+  --color-success-600: #8BC784;
+  --color-success-500: #66AF50; /* Main green */
   --color-success-400: #8BC784;
-  --color-success-300: #C8EFCA;
-  --color-success-200: #D4EDDA;
-  --color-success-100: #E8F5E8;
+  --color-success-300: #C5FDC4;
+  --color-success-200: #D8FDDB;
+  --color-success-100: #EFFFFD;
   --color-success-50: #EFFFFD;
 
   /* Warning Colors (Orange/Yellow) - For alerts, pending items */
-  --color-warning-900: #FF8800;
-  --color-warning-800: #FF9800;
-  --color-warning-700: #FFB800;
-  --color-warning-600: #FFCD00;
-  --color-warning-500: #FFCD00; /* Main orange */
-  --color-warning-400: #FFDD39;
-  --color-warning-300: #FFFA88;
-  --color-warning-200: #FFE999;
-  --color-warning-100: #FFF4CC;
-  --color-warning-50: #FFFFA0;
+  --color-warning-900: #FF9800;
+  --color-warning-800: #FFB800;
+  --color-warning-700: #FFC900;
+  --color-warning-600: #FFD829;
+  --color-warning-500: #FFC900; /* Main orange */
+  --color-warning-400: #FFD829;
+  --color-warning-300: #FFEA88;
+  --color-warning-200: #FFF0B3;
+  --color-warning-100: #FFF4D0;
+  --color-warning-50: #FFF4D0;
 
   /* Error Colors (Reds) - For overdue debts, errors */
   --color-error-900: #C70101;
-  --color-error-800: #F10000;
-  --color-error-700: #FF2C2C;
-  --color-error-600: #FF6666;
-  --color-error-500: #FF2C2C; /* Main red */
-  --color-error-400: #FF9999;
-  --color-error-300: #FFCCCC;
-  --color-error-200: #FFD1DD;
-  --color-error-100: #FFE5E5;
-  --color-error-50: #FFF5F5;
+  --color-error-800: #FF0000;
+  --color-error-700: #FF2C3C;
+  --color-error-600: #FFE888;
+  --color-error-500: #FF2C3C; /* Main red */
+  --color-error-400: #FFE888;
+  --color-error-300: #FFD1DD;
+  --color-error-200: #FFE5E5;
+  --color-error-100: #FFEFEF;
+  --color-error-50: #FFEFEF;
 
   /* Neutral Colors - For backgrounds, text, borders */
   --color-neutral-900: #2c3e50;
