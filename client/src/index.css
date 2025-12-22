@@ -626,44 +626,12 @@ label, .label, .caption, .footnote {
 
 /* Modern Loading Spinner - Simple Design */
 .spinner {
-  width: 60px;
-  height: 60px;
-  margin: 2rem auto;
-  position: relative;
-}
-
-.spinner::before,
-.spinner::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-}
-
-.spinner::before {
-  width: 100%;
-  height: 100%;
-  border: 4px solid rgba(255, 255, 255, 0.2);
-  border-top-color: #ffffff;
-  animation: spin 1s linear infinite;
-}
-
-.spinner::after {
-  width: 100%;
-  height: 100%;
-  border: 4px solid transparent;
-  border-radius: 50%;
-  border-top-color: #00B9FF;
-  animation: spin 1.5s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  display: none; /* Hide circular spinner */
 }
 
 /* Loading Text Styles */
 .loading-text {
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .loading-text h2 {
@@ -725,29 +693,32 @@ label, .label, .caption, .footnote {
 
 /* Progress Bar for Loading */
 .loading-progress {
-  width: 200px;
-  height: 4px;
+  width: 300px;
+  height: 8px;
   background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-  margin: 1.5rem auto 0;
+  border-radius: 20px;
+  margin: 2rem auto 0;
   overflow: hidden;
   position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .loading-progress::after {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
+  left: 0;
+  width: 0;
   height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  animation: progressSlide 2s ease-in-out infinite;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  animation: progressFill 2s ease-in-out forwards;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-@keyframes progressSlide {
-  0% { left: -100%; }
-  100% { left: 100%; }
+@keyframes progressFill {
+  0% { width: 0%; }
+  100% { width: 100%; }
 }
 
 /* Simple loading for inline elements */
