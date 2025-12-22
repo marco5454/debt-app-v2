@@ -112,52 +112,61 @@ function Register({ onRegister }) {
   }
 
   return (
-    <div className="login-card">
-      {/* Custom Notification */}
-      {showNotification && (
-        <div className="success-notification">
-          <div className="notification-content">
-            <span className="notification-icon">✅</span>
-            <span className="notification-text">Account created successfully!</span>
-          </div>
-        </div>
-      )}
-      
-      <div className="login-header">
-        <h1>💰 Debt Tracker</h1>
-        <p>Create your account</p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="login-form">
-        {error && (
-          <div className="login-error">
-            {error}
+    <div className="login-container">
+      <div className="register-card">
+        {/* Custom Notification */}
+        {showNotification && (
+          <div className="success-notification">
+            <div className="notification-content">
+              <span className="notification-icon">✅</span>
+              <span className="notification-text">Account created successfully!</span>
+            </div>
           </div>
         )}
-
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            placeholder="Enter your username"
-            required
-            minLength={2}
-          />
+        
+        <div className="register-header">
+          <div className="login-brand">
+            <div className="brand-icon">💰</div>
+            <h1 className="brand-title">Debt Tracker</h1>
+          </div>
+          <p className="register-subtitle">Create your account</p>
         </div>
 
+        <form onSubmit={handleSubmit} className="register-form">
+          {error && (
+            <div className="register-error">
+              <div className="error-icon">⚠️</div>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <div className="form-group">
+            <label htmlFor="username" className="form-label">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              className="form-input"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="Enter your username"
+              disabled={isLoading}
+              required
+              minLength={2}
+            />
+          </div>
+
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password" className="form-label">Password</label>
           <input
             type="password"
             id="password"
             name="password"
+            className="form-input"
             value={formData.password}
             onChange={handleChange}
             placeholder="Enter your password (min 6 characters)"
+            disabled={isLoading}
             required
             autoComplete="new-password"
             minLength={6}
@@ -165,14 +174,15 @@ function Register({ onRegister }) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="gender">Gender</label>
+          <label htmlFor="gender" className="form-label">Gender</label>
           <select
             id="gender"
             name="gender"
+            className="form-input"
             value={formData.gender}
             onChange={handleChange}
+            disabled={isLoading}
             required
-            className="form-select"
           >
             <option value="">Select gender</option>
             <option value="Male">Male</option>
@@ -183,25 +193,33 @@ function Register({ onRegister }) {
 
         <button 
           type="submit" 
-          className="btn btn-primary btn-login"
+          className="btn-register"
           disabled={isLoading}
         >
-          {isLoading ? 'Registering...' : 'Register'}
+          {isLoading ? (
+            <>
+              <span className="loading-spinner"></span>
+              Registering...
+            </>
+          ) : (
+            'Register'
+          )}
         </button>
       </form>
 
-      <div className="login-footer">
-        <p>
+      <div className="register-footer">
+        <p className="signin-prompt">
           Already have an account?{' '}
           <button 
             type="button" 
-            className="link-button"
+            className="link-login"
             onClick={() => navigate('/login')}
           >
             Sign In
           </button>
         </p>
       </div>
+    </div>
     </div>
   )
 }
