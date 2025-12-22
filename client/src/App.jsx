@@ -37,6 +37,7 @@ function AppContent({
 }) {
   const location = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showReportModal, setShowReportModal] = useState(false)
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -178,6 +179,16 @@ function AppContent({
                   <span className="menu-icon">❓</span>
                   FAQ
                 </Link>
+                <button 
+                  className="mobile-nav-item mobile-feedback-btn"
+                  onClick={() => {
+                    setShowReportModal(true)
+                    setIsMobileMenuOpen(false)
+                  }}
+                >
+                  <span className="menu-icon">💬</span>
+                  Feedback
+                </button>
               </nav>
             </div>
           </div>
@@ -215,6 +226,14 @@ function AppContent({
             >
               FAQ
             </Link>
+            <button 
+              className="btn-report"
+              onClick={() => setShowReportModal(true)}
+              title="Share feedback or report issues"
+            >
+              <span className="report-icon">💬</span>
+              Feedback
+            </button>
           </div>
         </nav>
 
@@ -230,7 +249,11 @@ function AppContent({
               {loading ? (
                 <div className="loading">Loading debts...</div>
               ) : (
-                <Dashboard debts={debts} />
+                <Dashboard 
+                  debts={debts} 
+                  showReportModal={showReportModal}
+                  setShowReportModal={setShowReportModal}
+                />
               )}
             </div>
           } />

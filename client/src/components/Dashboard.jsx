@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function Dashboard({ debts }) {
+export default function Dashboard({ debts, showReportModal, setShowReportModal }) {
   const [stats, setStats] = useState({
     totalDebt: 0,
     totalPaid: 0,
@@ -15,8 +15,6 @@ export default function Dashboard({ debts }) {
     monthlyInterest: 0,
     annualInterest: 0
   })
-  
-  const [showReportModal, setShowReportModal] = useState(false)
   const [showNotification, setShowNotification] = useState(false)
   const [reportData, setReportData] = useState({
     type: 'issue',
@@ -182,14 +180,6 @@ export default function Dashboard({ debts }) {
         <div className="dashboard-title-section">
           <h1>Debt Overview</h1>
           <p>Your complete financial debt summary</p>
-          <button 
-            className="btn-report-mobile"
-            onClick={() => setShowReportModal(true)}
-            title="Share feedback or report issues"
-          >
-            <span className="report-icon">💬</span>
-            Feedback
-          </button>
         </div>
       </div>
 
@@ -258,37 +248,39 @@ export default function Dashboard({ debts }) {
         </div>
       </div>
 
-      {/* Quick Actions Panel */}
-      <div className="quick-actions">
-        <h3>⚡ Quick Actions</h3>
-        <div className="actions-grid">
-          <div className="action-card" onClick={() => window.location.href = '/all-debts'}>
-            <span className="action-icon">💳</span>
-            <h4>Add New Debt</h4>
-            <p className="action-description">Track a new debt or loan</p>
-          </div>
-          <div className="action-card" onClick={() => window.location.href = '/payments'}>
-            <span className="action-icon">💰</span>
-            <h4>Make Payment</h4>
-            <p className="action-description">Record a debt payment</p>
-          </div>
-          <div className="action-card" onClick={() => window.location.href = '/paid-debts'}>
-            <span className="action-icon">✅</span>
-            <h4>View Completed</h4>
-            <p className="action-description">See your paid-off debts</p>
-          </div>
-          <div className="action-card" onClick={() => window.location.href = '/faq'}>
-            <span className="action-icon">❓</span>
-            <h4>Get Help</h4>
-            <p className="action-description">FAQ and support</p>
+      {/* Three Column Layout for Quick Actions, Insights, and Progress */}
+      <div className="dashboard-three-column">
+        {/* Quick Actions Panel */}
+        <div className="quick-actions">
+          <h3>⚡ Quick Actions</h3>
+          <div className="actions-grid">
+            <div className="action-card" onClick={() => window.location.href = '/all-debts'}>
+              <span className="action-icon">💳</span>
+              <h4>Add New Debt</h4>
+              <p className="action-description">Track a new debt or loan</p>
+            </div>
+            <div className="action-card" onClick={() => window.location.href = '/payments'}>
+              <span className="action-icon">💰</span>
+              <h4>Make Payment</h4>
+              <p className="action-description">Record a debt payment</p>
+            </div>
+            <div className="action-card" onClick={() => window.location.href = '/paid-debts'}>
+              <span className="action-icon">✅</span>
+              <h4>View Completed</h4>
+              <p className="action-description">See your paid-off debts</p>
+            </div>
+            <div className="action-card" onClick={() => window.location.href = '/faq'}>
+              <span className="action-icon">❓</span>
+              <h4>Get Help</h4>
+              <p className="action-description">FAQ and support</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Financial Insights Panel */}
-      <div className="financial-insights">
-        <h3>📊 Financial Insights</h3>
-        <div className="insights-grid">
+        {/* Financial Insights Panel */}
+        <div className="financial-insights">
+          <h3>📊 Financial Insights</h3>
+          <div className="insights-grid">
           <div className="insight-card">
             <div className="insight-header">
               <div className="insight-icon">📈</div>
@@ -367,6 +359,7 @@ export default function Dashboard({ debts }) {
             <span className="progress-change same">→ Consistent payments</span>
           </div>
         </div>
+      </div>
       </div>
 
       {/* Financial Tips Panel */}
