@@ -168,6 +168,107 @@
 }
 
 /* Dashboard specific styles */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-info-700));
+  color: var(--text-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.dashboard-title-section {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dashboard-title-section h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-title-section p {
+  opacity: 0.9;
+  font-size: 1.1rem;
+}
+
+.btn-report {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Show desktop button on tablets and above */
+@media (min-width: 769px) {
+  .btn-report {
+    display: flex !important;
+  }
+  
+  .btn-report-mobile {
+    display: none !important;
+  }
+}
+
+.btn-report:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-report-mobile {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-top: 0.75rem;
+}
+
+.btn-report-mobile:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.report-icon {
+  font-size: 1rem;
+}
 .dashboard-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -195,7 +296,8 @@
 }
 
 /* Stats Cards */
-.stats-container {
+.stats-container,
+.dashboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
@@ -204,6 +306,53 @@
   max-width: 1200px;
   justify-content: center;
   align-items: center;
+}
+
+/* Dashboard secondary stats */
+.dashboard-secondary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.secondary-stat-card {
+  background-color: var(--bg-primary);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+.secondary-stat-card h4 {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.secondary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.secondary-value.active {
+  color: var(--color-info-500);
+}
+
+.secondary-value.completed {
+  color: var(--color-success-500);
+}
+
+.secondary-value.overdue {
+  color: var(--color-error-500);
+}
+
+.secondary-value.good {
+  color: var(--color-success-500);
 }
 
 .stat-card {
@@ -263,6 +412,19 @@
   margin-bottom: 1rem;
 }
 
+.stat-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
 .stat-value {
   color: var(--text-primary);
   font-size: 2.5rem;
@@ -273,6 +435,23 @@
 .stat-subtitle {
   color: var(--text-muted);
   font-size: 0.85rem;
+}
+
+/* Progress bar for dashboard */
+.progress-bar-dashboard {
+  width: 100%;
+  height: 6px;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-fill-dashboard {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-success-400), var(--color-success-600));
+  transition: width 0.3s ease;
+  border-radius: var(--radius-full);
 }
 
 /* Button styles */
@@ -944,6 +1123,14 @@
     font-size: 1.6rem;
   }
   
+  .btn-report {
+    display: none;
+  }
+  
+  .btn-report-mobile {
+    display: flex;
+  }
+  
   .notification {
     top: 10px;
     right: 10px;
@@ -1052,6 +1239,113 @@
   .modal-content {
     margin: 5px;
     width: calc(100% - 10px);
+  }
+}
+
+/* Ultra Small Mobile Devices - 384px and below */
+@media (max-width: 400px) {
+  .page-container {
+    padding: 8px;
+  }
+
+  .main-content {
+    padding: 0 8px;
+  }
+
+  .dashboard-header {
+    padding: 1rem 0.75rem;
+    margin-bottom: 1rem;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .dashboard-title-section {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.4rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .dashboard-header p {
+    font-size: 0.9rem;
+  }
+
+  .btn-report {
+    display: none;
+  }
+
+  .btn-report-mobile {
+    display: flex;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .stats-container,
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem 0.75rem;
+    margin: 0;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .stat-card h3 {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .dashboard-secondary-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .secondary-stat-card {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .secondary-stat-card h4 {
+    font-size: 0.7rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .secondary-value {
+    font-size: 1.1rem;
+  }
+
+  .progress-bar-dashboard {
+    height: 4px;
+    margin-top: 0.25rem;
+  }
+
+  /* Ensure cards don't overflow */
+  .stat-content {
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+
+  /* Fix any text overflow */
+  .stat-value,
+  .secondary-value {
+    word-break: break-word;
+    hyphens: auto;
   }
 }
 /* All Debts Table Styling - Google Design Handbook Theme */

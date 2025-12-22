@@ -182,15 +182,15 @@ export default function Dashboard({ debts }) {
         <div className="dashboard-title-section">
           <h1>Debt Overview</h1>
           <p>Your complete financial debt summary</p>
+          <button 
+            className="btn-report-mobile"
+            onClick={() => setShowReportModal(true)}
+            title="Share feedback or report issues"
+          >
+            <span className="report-icon">💬</span>
+            Feedback
+          </button>
         </div>
-        <button 
-          className="btn-report"
-          onClick={() => setShowReportModal(true)}
-          title="Share feedback or report issues"
-        >
-          <span className="report-icon">💬</span>
-          Feedback
-        </button>
       </div>
 
       {/* Main Stats Cards */}
