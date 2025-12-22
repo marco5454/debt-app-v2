@@ -248,8 +248,8 @@ export default function Dashboard({ debts, showReportModal, setShowReportModal }
         </div>
       </div>
 
-      {/* Three Column Layout for Quick Actions, Insights, and Progress */}
-      <div className="dashboard-three-column">
+      {/* Two Column Layout for Quick Actions and Progress */}
+      <div className="dashboard-two-column">
         {/* Quick Actions Panel */}
         <div className="quick-actions">
           <h3>⚡ Quick Actions</h3>
@@ -277,61 +277,7 @@ export default function Dashboard({ debts, showReportModal, setShowReportModal }
           </div>
         </div>
 
-        {/* Financial Insights Panel */}
-        <div className="financial-insights">
-          <h3>📊 Financial Insights</h3>
-          <div className="insights-grid">
-          <div className="insight-card">
-            <div className="insight-header">
-              <div className="insight-icon">📈</div>
-              <div className="insight-title">Average Payment</div>
-            </div>
-            <div className="insight-value">
-              {stats.totalPaid > 0 && debts.length > 0 
-                ? formatCurrency(stats.totalPaid / debts.length) 
-                : formatCurrency(0)
-              }
-            </div>
-            <div className="insight-description">
-              Average payment per debt
-            </div>
-          </div>
-          
-          <div className="insight-card">
-            <div className="insight-header">
-              <div className="insight-icon">🎯</div>
-              <div className="insight-title">Completion Rate</div>
-            </div>
-            <div className="insight-value">
-              {debts.length > 0 
-                ? `${((stats.completedDebts / debts.length) * 100).toFixed(1)}%`
-                : '0%'
-              }
-            </div>
-            <div className="insight-description">
-              Debts successfully paid off
-            </div>
-          </div>
-          
-          <div className="insight-card">
-            <div className="insight-header">
-              <div className="insight-icon">⚡</div>
-              <div className="insight-title">Debt-Free Goal</div>
-            </div>
-            <div className="insight-value">
-              {stats.remainingDebt > 0 && stats.totalPaid > 0 
-                ? `${Math.ceil(stats.remainingDebt / (stats.totalPaid / 12))} months`
-                : 'N/A'
-              }
-            </div>
-            <div className="insight-description">
-              Estimated time to debt freedom
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Monthly Progress Panel */}
+        {/* Monthly Progress Panel */}
       <div className="monthly-progress">
         <h3>📅 This Month's Progress</h3>
         <div className="progress-comparison">
